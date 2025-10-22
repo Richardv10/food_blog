@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>My Saved Recipes</h1>
+
+{% if saved_recipes %}
+    <p>You have {{ saved_recipes.count }} saved recipe(s).</p>
+    
+    <div class="saved-recipes-grid">
+        {% for library_entry in saved_recipes %}
+            <div class="recipe-card">
+                <h3>Recipe ID: {{ library_entry.recipe.title }}</h3>
+                <p><strong>Title:</strong> {{ library_entry.recipe.title }}</p>
+                <p><small>Saved on: {{ library_entry.added_at|date:"F d, Y" }}</small></p>
+                <a href="{% url 'recipe_detail' library_entry.recipe.recipe_id %}" class="btn btn-primary">View Recipe</a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>You haven't saved any recipes yet.</p>
+    <a href="{% url 'search_recipes' %}" class="btn btn-primary">Search for Recipes</a>
+{% endif %}
+
+{% endblock %}

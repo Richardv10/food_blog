@@ -21,4 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),  # Root URL for home page
     path('search/', include('recipe.urls')),
+    path("accounts/", include("allauth.urls")),
+    path('summernote/', include('django_summernote.urls')),
 ]

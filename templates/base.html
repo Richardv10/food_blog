@@ -1,5 +1,12 @@
 {% load static %}
 {% url 'home' as home_url %}
+{% url 'account_login' as login_url %}
+{% url 'account_signup' as signup_url %}
+{% url 'account_logout' as logout_url %}
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,14 +38,44 @@
                     <li class="nav-item">
                         <a href="{% url 'random_recipe' %}" class="nav-link">Random Recipe</a>
                     </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'my_recipes' %}" class="nav-link">My Recipes</a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a href="/admin/" class="nav-link">Admin</a>
                     </li>
+                    {% if user.is_authenticated %}
+<li class="nav-item">
+	<a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>
+</li>
+{% else %}
+<li class="nav-item">
+	<a class="nav-link {% if request.path == signup_url %}active{% endif %}" aria-current="page"
+		href="{% url 'account_signup' %}">Register</a>
+</li>
+<li class="nav-item">
+	<a class="nav-link {% if request.path == login_url %}active{% endif %}" aria-current="page" href="{% url 'account_login' %}">Login</a>
+</li>
+{% endif %}
                 </ul>
             </div>
         </nav>
     </header>
     <main>
+        <!-- Django Messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
         {% block content %}
         {% endblock %}
     </main>

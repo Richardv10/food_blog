@@ -3,12 +3,27 @@
 {% block content %}
 <h1>{{ recipe.title }}</h1>
 <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+
+{% if user.is_authenticated %}
+    {% if is_saved %}
+        <button class="btn btn-success" disabled>✓ Already in Favorites</button>
+    {% else %}
+        <form method="post" action="{% url 'save_recipe' recipe.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Add to Favorites</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p><a href="/accounts/login/">Log in</a> to save this recipe to your favorites.</p>
+{% endif %}
+
 <h2>Ingredients:</h2>
 <ul>
 {% for ingredient in recipe.extendedIngredients %}
     <li>{{ ingredient.original }}</li>
 {% endfor %}
 </ul>
+
 <h2>Instructions:</h2>
 {{ recipe.instructions|safe }}
 {% endblock %}
