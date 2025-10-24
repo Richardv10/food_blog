@@ -1,2 +1,38 @@
+# Virtual Environment
 .venv/
+venv/
+env/
+
+# Environment Variables
 env.py
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Static files (collected by collectstatic)
+/staticfiles/
+/static/
+
+# Media files
+/media/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
