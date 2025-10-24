@@ -4,8 +4,53 @@
 
 <h1>Welcome to Recipe Room</h1>
 
-<p>This will hopefully work</p>
+<p>Discover and share amazing recipes with the community!</p>
 
-<a href="{% url 'search_recipes' %}">Search for Recipes</a>
+<!-- Feed of shared recipes -->
+<div class="feed-container">
+    <h2>Community Recipe Feed</h2>
+    
+    {% if shared_recipes %}
+        {% for user_recipe in shared_recipes %}
+        <div class="recipe-card">
+            <div class="card-header">
+                <strong>{{ user_recipe.user.username }}</strong> shared a recipe
+                <small class="text-muted">{{ user_recipe.shared_at|timesince }} ago</small>
+            </div>
+            <div class="card-body">
+                <h4>
+                    <a href="{% url 'recipe_detail' user_recipe.recipe.recipe_id %}">
+                        {{ user_recipe.recipe.title }}
+                    </a>
+                </h4>
+                
+                {% if user_recipe.rating %}
+                <div class="rating">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= user_recipe.rating %}
+                            ⭐
+                        {% endif %}
+                    {% endfor %}
+                    ({{ user_recipe.rating }}/5)
+                </div>
+                {% endif %}
+                
+                {% if user_recipe.message %}
+                <p class="message">{{ user_recipe.message }}</p>
+                {% endif %}
+                
+                <img src="https://spoonacular.com/recipeImages/{{ user_recipe.recipe.recipe_id }}-312x231.jpg" 
+                     alt="{{ user_recipe.recipe.title }}" class="recipe-image">
+                
+                <a href="{% url 'recipe_detail' user_recipe.recipe.recipe_id %}" class="btn btn-primary">
+                    View Recipe
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No recipes shared yet. Be the first to share a recipe!</p>
+    {% endif %}
+</div>
 
 {% endblock %}

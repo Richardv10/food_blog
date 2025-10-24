@@ -13,6 +13,48 @@
             <button type="submit" class="btn btn-primary">Add to Favorites</button>
         </form>
     {% endif %}
+    
+    <!-- Share Button -->
+    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#shareModal">
+        Share to Feed
+    </button>
+    
+    <!-- Share Modal -->
+    <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shareModalLabel">Share {{ recipe.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'share_recipe' recipe.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Add a message (optional):</label>
+                            <textarea name="message" id="message" class="form-control" rows="3" 
+                                      placeholder="Share your thoughts about this recipe..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Rating (optional):</label>
+                            <select name="rating" id="rating" class="form-select">
+                                <option value="">No rating</option>
+                                <option value="5">⭐⭐⭐⭐⭐ (5 stars)</option>
+                                <option value="4">⭐⭐⭐⭐ (4 stars)</option>
+                                <option value="3">⭐⭐⭐ (3 stars)</option>
+                                <option value="2">⭐⭐ (2 stars)</option>
+                                <option value="1">⭐ (1 star)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Share to Feed</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% else %}
     <p><a href="/accounts/login/">Log in</a> to save this recipe to your favorites.</p>
 {% endif %}
