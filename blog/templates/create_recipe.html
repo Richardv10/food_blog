@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1>Create a New Recipe</h1>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description (Optional)</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" 
+                              placeholder="Brief description of your recipe..."></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="ingredients" class="form-label">Ingredients</label>
+                    <textarea class="form-control" id="ingredients" name="ingredients" rows="5" required
+                              placeholder="List each ingredient on a new line, e.g.:&#10;2 cups flour&#10;1 tsp salt&#10;3 eggs"></textarea>
+                    <div class="form-text">List each ingredient on a new line</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="instructions" class="form-label">Instructions</label>
+                    <textarea class="form-control" id="instructions" name="instructions" rows="6" required
+                              placeholder="Describe the cooking steps..."></textarea>
+                    <div class="form-text">Describe the cooking steps</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="servings" class="form-label">Servings</label>
+                            <input type="number" class="form-control" id="servings" name="servings" min="1">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="ready_in_minutes" class="form-label">Ready In (minutes)</label>
+                            <input type="number" class="form-control" id="ready_in_minutes" name="ready_in_minutes" min="1">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="featured_image" class="form-label">Featured Image</label>
+                    <input type="file" class="form-control" id="featured_image" name="featured_image" accept="image/*">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Create Recipe</button>
+                <a href="{% url 'my_recipes' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

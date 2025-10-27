@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Create Your Own Recipe</h1>
+    <p class="text-muted">Share your culinary creations with the community!</p>
+    
+    <form method="post" enctype="multipart/form-data" class="recipe-form">
+        {% csrf_token %}
+        
+        <!-- Basic Recipe Info -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Recipe Title *</label>
+                    <input type="text" class="form-control" id="title" name="title" 
+                           placeholder="Enter your recipe title..." required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="summary" class="form-label">Description</label>
+                    <textarea class="form-control" id="summary" name="summary" rows="3"
+                              placeholder="Brief description of your recipe..."></textarea>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="image" class="form-label">Recipe Image</label>
+                    <input type="file" class="form-control" id="image" name="image" 
+                           accept="image/*">
+                    <small class="form-text text-muted">Upload a photo of your finished dish</small>
+                </div>
+                
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="servings" class="form-label">Servings</label>
+                            <input type="number" class="form-control" id="servings" name="servings" 
+                                   min="1" placeholder="4">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="ready_in_minutes" class="form-label">Cook Time (min)</label>
+                            <input type="number" class="form-control" id="ready_in_minutes" 
+                                   name="ready_in_minutes" min="1" placeholder="30">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ingredients Section -->
+        <div class="mb-4">
+            <label class="form-label">Ingredients *</label>
+            <div id="ingredients-container">
+                <div class="ingredient-row mb-2">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="ingredient_amount[]" 
+                                   placeholder="1 cup" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" name="ingredient_unit[]" 
+                                   placeholder="unit (optional)">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="ingredient_name[]" 
+                                   placeholder="ingredient name" required>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-outline-danger btn-sm remove-ingredient">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" id="add-ingredient">
+                <i class="bi bi-plus"></i> Add Ingredient
+            </button>
+        </div>
+        
+        <!-- Instructions Section -->
+        <div class="mb-4">
+            <label for="instructions" class="form-label">Instructions *</label>
+            <textarea class="form-control" id="instructions" name="instructions" rows="8"
+                      placeholder="Step 1: Start by...&#10;Step 2: Next...&#10;Step 3: Finally..." required></textarea>
+            <small class="form-text text-muted">Write clear, step-by-step instructions</small>
+        </div>
+        
+        <!-- Submit Buttons -->
+        <div class="d-flex gap-3">
+            <button type="submit" name="action" value="save" class="btn btn-primary">
+                <i class="bi bi-bookmark"></i> Save Recipe
+            </button>
+            <button type="submit" name="action" value="save_and_share" class="btn btn-success">
+                <i class="bi bi-share"></i> Save & Share to Feed
+            </button>
+            <a href="{% url 'my_recipes' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<!-- JavaScript for dynamic ingredients -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addIngredientBtn = document.getElementById('add-ingredient');
+    const ingredientsContainer = document.getElementById('ingredients-container');
+    
+    // Add new ingredient row
+    addIngredientBtn.addEventListener('click', function() {
+        const newRow = document.createElement('div');
+        newRow.className = 'ingredient-row mb-2';
+        newRow.innerHTML = `
+            <div class="row">
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="ingredient_amount[]" 
+                           placeholder="1 cup" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="ingredient_unit[]" 
+                           placeholder="unit (optional)">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="ingredient_name[]" 
+                           placeholder="ingredient name" required>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-outline-danger btn-sm remove-ingredient">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        ingredientsContainer.appendChild(newRow);
+    });
+    
+    // Remove ingredient row
+    ingredientsContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-ingredient') || 
+            e.target.closest('.remove-ingredient')) {
+            const row = e.target.closest('.ingredient-row');
+            if (ingredientsContainer.children.length > 1) {
+                row.remove();
+            }
+        }
+    });
+});
+</script>
+
+<style>
+.recipe-form {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.ingredient-row {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.ingredient-row:hover {
+    background-color: #e9ecef;
+}
+</style>
+
+{% endblock %}

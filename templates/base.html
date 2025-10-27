@@ -3,6 +3,7 @@
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
+{% url 'my_recipes' as my_recipes_url %}
 
 
 
@@ -44,6 +45,9 @@
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a href="{% url 'my_recipes' %}" class="nav-link">My Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'create_recipe' %}" class="nav-link">Create Recipe</a>
                     </li>
                     {% endif %}
                     <li class="nav-item">

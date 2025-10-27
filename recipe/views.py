@@ -212,7 +212,14 @@ def save_recipe(request, recipe_id):
 def my_recipes(request):
     saved_recipes = UserRecipe.objects.filter(user=request.user).order_by('-created_at')
     
-    return render(request, 'recipe/my_recipes.html', {'saved_recipes': saved_recipes})
+    # Import here to avoid circular imports
+    from blog.models import CreatedRecipe
+    created_recipes = CreatedRecipe.objects.filter(creator=request.user).order_by('-created_at')
+    
+    return render(request, 'recipe/my_recipes.html', {
+        'saved_recipes': saved_recipes,
+        'created_recipes': created_recipes
+    })
 
 # Delete Recipe from User's Favorites
 #  
