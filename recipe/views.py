@@ -6,8 +6,63 @@ from django.conf import settings
 from django.contrib import messages
 from django.utils import timezone
 import requests 
-from .models import Recipe, UserRecipe
+from .models import Recipe, UserRecipe, RecipeComment
 
+# Helper function to fetch and cache recipe data
+def get_or_fetch_recipe(recipe_id):
+    """
+    Get recipe from database cache or fetch from API if not cached.
+    Returns a tuple: (recipe_obj, recipe_data_dict)
+    """
+    recipe_id_str = str(recipe_id)
+    
+    # Try to get from database
+    try:
+        recipe_obj = Recipe.objects.get(recipe_id=recipe_id_str)
+        
+        # If cached, return cached data
+        if recipe_obj.is_cached:
+            recipe_data = {
+                'id': int(recipe_id),
+                'title': recipe_obj.title,
+                'image': recipe_obj.image_url,
+                'summary': recipe_obj.summary,
+                'instructions': recipe_obj.instructions,
+                'extendedIngredients': recipe_obj.ingredients or [],
+                'readyInMinutes': recipe_obj.ready_in_minutes,
+                'servings': recipe_obj.servings,
+                'sourceUrl': recipe_obj.source_url,
+            }
+            return recipe_obj, recipe_data
+    except Recipe.DoesNotExist:
+        pass
+    
+    # Fetch from API (if not cached)
+    url = f"https://api.spoonacular.com/recipes/{recipe_id}/information"
+    params = {'apiKey': settings.SPOONACULAR_API_KEY}
+    response = requests.get(url, params=params)
+    recipe_data = response.json()
+    
+    # Fix image URL
+    recipe_data['image'] = f"https://spoonacular.com/recipeImages/{recipe_id}-312x231.jpg"
+    
+    # Create recipe in database with full cached data
+    recipe_obj, created = Recipe.objects.get_or_create(
+        recipe_id=recipe_id_str,
+        defaults={
+            'title': recipe_data.get('title', f'Recipe {recipe_id}'),
+            'image_url': recipe_data.get('image'),
+            'summary': recipe_data.get('summary', ''),
+            'instructions': recipe_data.get('instructions', ''),
+            'ingredients': recipe_data.get('extendedIngredients', []),
+            'ready_in_minutes': recipe_data.get('readyInMinutes'),
+            'servings': recipe_data.get('servings'),
+            'source_url': recipe_data.get('sourceUrl'),
+            'is_cached': True
+        }
+    )
+    
+    return recipe_obj, recipe_data
 
 
 def home_view(request):
@@ -18,23 +73,15 @@ def home_view(request):
     
     return render(request, "home.html", {'shared_recipes': shared_recipes})
 
+# Share recipe to Feed
 def share_recipe(request, recipe_id):
-    """Share a recipe to the homepage feed"""
+    """Share a recipe to the homepage feed and cache full recipe data"""
     if request.method == 'POST':
         message = request.POST.get('message', '')
         rating = request.POST.get('rating', None)
         
-        # Fetch recipe data from API to get the title
-        url = f"https://api.spoonacular.com/recipes/{recipe_id}/information"
-        params = {'apiKey': settings.SPOONACULAR_API_KEY}
-        response = requests.get(url, params=params)
-        recipe_data = response.json()
-        
-        # Get or create the Recipe object
-        recipe_obj, created = Recipe.objects.get_or_create(
-            recipe_id=str(recipe_id),
-            defaults={'title': recipe_data.get('title', f'Recipe {recipe_id}')}
-        )
+        # Use helper to fetch and cache recipe data
+        recipe_obj, recipe_data = get_or_fetch_recipe(recipe_id)
         
         # Get or create UserRecipe entry and mark as shared
         user_recipe, created = UserRecipe.objects.get_or_create(
@@ -83,14 +130,10 @@ def search_recipes(request):
         return render(request, 'search/results.html', {'recipes': recipes})
     return render(request, 'search/search.html') 
 
+
 def recipe_detail(request, recipe_id):
-    url = f"https://api.spoonacular.com/recipes/{recipe_id}/information"
-    params = {'apiKey': settings.SPOONACULAR_API_KEY}
-    response = requests.get(url, params=params)
-    recipe = response.json()
-    
-    # Fix image URL to use the working size format
-    recipe['image'] = f"https://spoonacular.com/recipeImages/{recipe_id}-312x231.jpg"
+    # Use cached data if available
+    recipe_obj, recipe = get_or_fetch_recipe(recipe_id)
     
     # Check if recipe is already saved by the user
     is_saved = UserRecipe.objects.filter(
@@ -98,13 +141,19 @@ def recipe_detail(request, recipe_id):
         recipe__recipe_id=str(recipe_id)
     ).exists() if request.user.is_authenticated else False
     
+     # Get all comments for this recipe
+    comments = RecipeComment.objects.filter(
+        recipe=recipe_obj
+    ).select_related('user').order_by('-created_at')
+    
     return render(request, 'search/detail.html', {
         'recipe': recipe,
-        'is_saved': is_saved
+        'is_saved': is_saved,
+        'comments': comments
     })
 
 def random_recipe(request):
-    """Get a random recipe from Spoonacular API"""
+    """Get a random recipe from Spoonacular API and cache it"""
     url = "https://api.spoonacular.com/recipes/random"
     params = {
         'apiKey': settings.SPOONACULAR_API_KEY,
@@ -113,29 +162,20 @@ def random_recipe(request):
     response = requests.get(url, params=params)
     data = response.json()
     
-    recipe = data['recipes'][0]
-    recipe_id = recipe['id']
+    recipe_data = data['recipes'][0]
+    recipe_id = recipe_data['id']
     
-    # Fix image URL
-    if 'image' in recipe and recipe['image']:
-        recipe['image'] = f"https://spoonacular.com/recipeImages/{recipe_id}-312x231.jpg"
+    # Cache this recipe for future use
+    recipe_obj, recipe = get_or_fetch_recipe(recipe_id)
     
     return render(request, 'search/detail.html', {'recipe': recipe})
 
 # Save Recipe to User's Favorites
 
 def save_recipe(request, recipe_id):
-    # Fetch recipe data from API to get the title
-    url = f"https://api.spoonacular.com/recipes/{recipe_id}/information"
-    params = {'apiKey': settings.SPOONACULAR_API_KEY}
-    response = requests.get(url, params=params)
-    recipe_data = response.json()
-    
-    # Get or create the Recipe object with the title
-    recipe_obj, created = Recipe.objects.get_or_create(
-        recipe_id=str(recipe_id),
-        defaults={'title': recipe_data.get('title', f'Recipe {recipe_id}')}
-    )
+    """Save a recipe to the user's collection and cache full recipe data"""
+    # Use helper to fetch and cache recipe data
+    recipe_obj, recipe_data = get_or_fetch_recipe(recipe_id)
     
     # Add to user's library (or get if already exists)
     user_recipe, created = UserRecipe.objects.get_or_create(
@@ -164,3 +204,20 @@ def delete_recipe(request, recipe_id):
         user_recipe.delete()
         messages.success(request, "Recipe deleted from your favorites.")
         return redirect('my_recipes')
+
+def make_comment(request, recipe_id):
+    if request.method == 'POST':
+        comment_text = request.POST.get('comment')
+        rating = request.POST.get('rating', None)
+        recipe_obj, _ = get_or_fetch_recipe(recipe_id)
+# Create the comment
+        RecipeComment.objects.create(
+            recipe=recipe_obj,
+            user=request.user,
+            comment=comment_text,
+            rating=rating if rating else None
+        )
+        messages.success(request, "Your comment has been added.")
+        return redirect('recipe_detail', recipe_id=recipe_id)
+    
+    return redirect('recipe_detail', recipe_id=recipe_id)

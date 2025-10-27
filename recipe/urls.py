@@ -9,4 +9,5 @@ urlpatterns = [
     path('recipe/<int:recipe_id>/share/', views.share_recipe, name='share_recipe'),
     path('recipe/<int:recipe_id>/delete/', views.delete_recipe, name='delete_recipe'),
     path('my-recipes/', views.my_recipes, name='my_recipes'),
+    path('recipe/<int:recipe_id>/comment/', views.make_comment, name='make_comment'),
 ]

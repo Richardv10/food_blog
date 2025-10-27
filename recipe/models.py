@@ -4,7 +4,20 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Recipe(models.Model):
     recipe_id = models.CharField(max_length=100, unique=True)  # ID from the external API
-    title = models.CharField(max_length=255, blank=True)    
+    title = models.CharField(max_length=255, blank=True)
+    
+    # Cached recipe data from API
+    image_url = models.URLField(max_length=500, blank=True, null=True)
+    summary = models.TextField(blank=True, null=True)
+    instructions = models.TextField(blank=True, null=True)
+    ingredients = models.JSONField(blank=True, null=True)  # Store as JSON array
+    ready_in_minutes = models.IntegerField(blank=True, null=True)
+    servings = models.IntegerField(blank=True, null=True)
+    source_url = models.URLField(max_length=500, blank=True, null=True)
+    
+    # Cache metadata
+    cached_at = models.DateTimeField(auto_now=True)  # Last time data was fetched
+    is_cached = models.BooleanField(default=False)  # Whether we have full data cached
     
 
     def __str__(self):

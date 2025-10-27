@@ -68,4 +68,64 @@
 
 <h2>Instructions:</h2>
 {{ recipe.instructions|safe }}
-{% endblock %}
+
+
+
+<!-- Comments Section -->
+<div class="comments-section" style="margin-top: 3rem;">
+    <h2>Comments</h2>
+    
+    {% if user.is_authenticated %}
+    <!-- Comment Form -->
+    <div class="comment-form">
+        <h3>Add Your Comment</h3>
+        <form method="POST" action="{% url 'make_comment' recipe.id %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="comment" class="form-label">Your Comment:</label>
+                <textarea name="comment" id="comment" class="form-control" 
+                          rows="4" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating (optional):</label>
+                <select name="rating" id="rating" class="form-select">
+                    <option value="">No rating</option>
+                    <option value="5">⭐⭐⭐⭐⭐ (5 stars)</option>
+                    <option value="4">⭐⭐⭐⭐ (4 stars)</option>
+                    <option value="3">⭐⭐⭐ (3 stars)</option>
+                    <option value="2">⭐⭐ (2 stars)</option>
+                    <option value="1">⭐ (1 star)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Post Comment</button>
+        </form>
+    </div>
+    {% else %}
+    <p><a href="{% url 'account_login' %}">Log in</a> to leave a comment.</p>
+    {% endif %}
+    
+    <!-- Display Comments -->
+    <div class="comments-list" style="margin-top: 2rem;">
+        <h3>All Comments ({{ comments.count }})</h3>
+        {% for comment in comments %}
+        <div class="comment-card" style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 5px;">
+            <div class="comment-header">
+                <strong>{{ comment.user.username }}</strong>
+                {% if comment.rating %}
+                <span style="margin-left: 1rem;">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= comment.rating %}⭐{% endif %}
+                    {% endfor %}
+                </span>
+                {% endif %}
+                <small class="text-muted" style="float: right;">{{ comment.created_at|timesince }} ago</small>
+            </div>
+            <div class="comment-body" style="margin-top: 0.5rem;">
+                {{ comment.comment }}
+            </div>
+        </div>
+        {% empty %}
+        <p>No comments yet. Be the first to comment!</p>
+        {% endfor %}
+    </div>
+</div>{% endblock %}

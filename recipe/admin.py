@@ -3,8 +3,10 @@ from .models import Recipe, UserRecipe, RecipeComment
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('recipe_id', 'title')
+    list_display = ('recipe_id', 'title', 'is_cached', 'cached_at', 'servings')
+    list_filter = ('is_cached', 'cached_at')
     search_fields = ('recipe_id', 'title')
+    readonly_fields = ('cached_at',)
 
 @admin.register(UserRecipe)
 class UserRecipeAdmin(admin.ModelAdmin):
