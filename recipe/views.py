@@ -71,7 +71,24 @@ def home_view(request):
         is_shared=True
     ).select_related('user', 'recipe').order_by('-shared_at')
     
-    return render(request, "home.html", {'shared_recipes': shared_recipes})
+    # Get comments for each shared recipe (limit to 3 most recent for feed display)
+    recipes_with_comments = []
+    for shared_recipe in shared_recipes:
+        comments = RecipeComment.objects.filter(
+            recipe=shared_recipe.recipe
+        ).select_related('user').order_by('-created_at')[:3]
+        
+        comment_count = RecipeComment.objects.filter(
+            recipe=shared_recipe.recipe
+        ).count()
+        
+        recipes_with_comments.append({
+            'shared_recipe': shared_recipe,
+            'recent_comments': comments,
+            'comment_count': comment_count
+        })
+    
+    return render(request, "home.html", {'recipes_with_comments': recipes_with_comments})
 
 # Share recipe to Feed
 def share_recipe(request, recipe_id):
@@ -221,3 +238,23 @@ def make_comment(request, recipe_id):
         return redirect('recipe_detail', recipe_id=recipe_id)
     
     return redirect('recipe_detail', recipe_id=recipe_id)
+
+
+def make_feed_comment(request, recipe_id):
+    """Handle comments submitted from the home feed"""
+    if request.method == 'POST' and request.user.is_authenticated:
+        comment_text = request.POST.get('comment')
+        
+        if comment_text:
+            recipe_obj, _ = get_or_fetch_recipe(recipe_id)
+            
+            # Create the comment
+            RecipeComment.objects.create(
+                recipe=recipe_obj,
+                user=request.user,
+                comment=comment_text,
+            )
+            
+            messages.success(request, "Your comment has been added.")
+    
+    return redirect('home')
