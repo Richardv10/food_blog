@@ -814,6 +814,13 @@ footer {
     margin-top: 1rem;
 }
 
+.form-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    line-height: 1.4;
+}
+
 .auth-footer {
     text-align: center;
     margin-top: 2rem;
