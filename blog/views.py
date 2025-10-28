@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.utils import timezone
 import requests 
 from recipe.models import Recipe, UserRecipe, RecipeComment
 from blog.models import CreatedRecipe
@@ -87,6 +88,94 @@ def delete_created_recipe(request, recipe_id):
         recipe = CreatedRecipe.objects.get(id=recipe_id, creator=request.user)
         recipe.delete()
         messages.success(request, 'Recipe deleted successfully!')
+    except CreatedRecipe.DoesNotExist:
+        messages.error(request, 'Recipe not found.')
+    
+    return redirect('my_recipes')
+
+
+@login_required
+def share_created_recipe(request, recipe_id):
+    """Share a created recipe to the community feed"""
+    try:
+        recipe = CreatedRecipe.objects.get(id=recipe_id, creator=request.user)
+    except CreatedRecipe.DoesNotExist:
+        messages.error(request, 'Recipe not found.')
+        return redirect('my_recipes')
+    
+    if request.method == 'POST':
+        message = request.POST.get('message', '')
+        
+        # Create a Recipe object for this created recipe if it doesn't exist
+        recipe_obj, created = Recipe.objects.get_or_create(
+            recipe_id=f"created_{recipe.id}",  # Unique identifier for created recipes
+            defaults={
+                'title': recipe.title,
+                'image_url': recipe.featured_image.url if recipe.featured_image else None,
+                'summary': recipe.description or '',
+                'instructions': recipe.instructions,
+                'ingredients': [{'original': ingredient} for ingredient in recipe.get_ingredients_list()],
+                'ready_in_minutes': recipe.ready_in_minutes,
+                'servings': recipe.servings,
+                'is_cached': True
+            }
+        )
+        
+        # Create or update UserRecipe for sharing
+        user_recipe, user_recipe_created = UserRecipe.objects.get_or_create(
+            user=request.user,
+            recipe=recipe_obj,
+            defaults={
+                'is_shared': True,
+                'message': message,
+                'shared_at': timezone.now()
+            }
+        )
+        
+        # If it already exists but wasn't shared, update it
+        if not user_recipe_created:
+            user_recipe.is_shared = True
+            user_recipe.message = message
+            user_recipe.shared_at = timezone.now()
+            user_recipe.save()
+        
+        # Update the original created recipe sharing status
+        recipe.is_shared = True
+        recipe.shared_message = message
+        
+        # Set shared_at timestamp if not already shared
+        if not recipe.shared_at:
+            recipe.shared_at = timezone.now()
+            
+        recipe.save()
+        
+        messages.success(request, f'"{recipe.title}" has been shared to the community feed!')
+        
+        return redirect('my_recipes')
+    
+    return redirect('my_recipes')
+
+
+@login_required 
+def unshare_created_recipe(request, recipe_id):
+    """Remove a created recipe from the community feed"""
+    try:
+        recipe = CreatedRecipe.objects.get(id=recipe_id, creator=request.user)
+        
+        # Find and unshare the corresponding Recipe/UserRecipe
+        try:
+            recipe_obj = Recipe.objects.get(recipe_id=f"created_{recipe.id}")
+            user_recipe = UserRecipe.objects.get(user=request.user, recipe=recipe_obj)
+            user_recipe.is_shared = False
+            user_recipe.save()
+        except (Recipe.DoesNotExist, UserRecipe.DoesNotExist):
+            pass  # Handle case where Recipe/UserRecipe doesn't exist
+        
+        # Update the original created recipe
+        recipe.is_shared = False
+        recipe.save()
+        
+        messages.success(request, f'"{recipe.title}" has been removed from the community feed.')
     except CreatedRecipe.DoesNotExist:
         messages.error(request, 'Recipe not found.')
     

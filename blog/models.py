@@ -14,6 +14,9 @@ class CreatedRecipe(models.Model):
     ready_in_minutes = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(1)])
     servings = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(1)])
     featured_image = CloudinaryField('image', default='placeholder')
+    is_shared = models.BooleanField(default=False)
+    shared_message = models.TextField(blank=True, null=True, help_text="Optional message when sharing")
+    shared_at = models.DateTimeField(blank=True, null=True)
     
     class Meta:
         ordering = ['-created_at']
