@@ -210,7 +210,12 @@ def save_recipe(request, recipe_id):
 # Display User Recipes
 
 def my_recipes(request):
-    saved_recipes = UserRecipe.objects.filter(user=request.user).order_by('-created_at')
+    # Get saved recipes, excluding user's own created recipes that were shared
+    saved_recipes = UserRecipe.objects.filter(
+        user=request.user
+    ).exclude(
+        recipe__recipe_id__startswith='created_'
+    ).order_by('-created_at')
     
     # Import here to avoid circular imports
     from blog.models import CreatedRecipe
@@ -253,15 +258,20 @@ def make_feed_comment(request, recipe_id):
         comment_text = request.POST.get('comment')
         
         if comment_text:
-            recipe_obj, _ = get_or_fetch_recipe(recipe_id)
-            
-            # Create the comment
-            RecipeComment.objects.create(
-                recipe=recipe_obj,
-                user=request.user,
-                comment=comment_text,
-            )
-            
-            messages.success(request, "Your comment has been added.")
+            try:
+                # For our unified system, just get the Recipe object directly
+                # since all shared recipes (API and created) exist as Recipe objects
+                recipe_obj = Recipe.objects.get(recipe_id=str(recipe_id))
+                
+                # Create the comment
+                RecipeComment.objects.create(
+                    recipe=recipe_obj,
+                    user=request.user,
+                    comment=comment_text,
+                )
+                
+                messages.success(request, "Your comment has been added.")
+            except Recipe.DoesNotExist:
+                messages.error(request, "Recipe not found.")
     
     return redirect('home')

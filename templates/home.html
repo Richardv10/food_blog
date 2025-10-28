@@ -3,8 +3,13 @@
 {% block content %}
 
 <h1>Welcome to Recipe Room</h1>
+{% if user.is_authenticated %}
+<h2>Welcome back, {{ user.username }}!</h2>
+{% endif %}
 
-<p>Discover and share amazing recipes with the community!</p>
+
+
+<p>Discover and share amazing recipes with the community! <br> Try searching for your favorite dishes, and share them with the room, <br> or create your own and build your library of favorites</p>
 
 <!-- Feed of shared recipes -->
 <div class="feed-container">
@@ -29,7 +34,11 @@
                     <!-- Handle different recipe types -->
                     {% if user_recipe.recipe.recipe_id|slice:":8" == "created_" %}
                         <!-- This is a user-created recipe -->
-                        <h4>{{ user_recipe.recipe.title }}</h4>
+                        <h4>
+                            <a href="{% url 'public_created_recipe_detail' user_recipe.recipe.recipe_id|slice:'8:' %}">
+                                {{ user_recipe.recipe.title }}
+                            </a>
+                        </h4>
                         
                         {% if user_recipe.recipe.summary %}
                         <p class="recipe-description">{{ user_recipe.recipe.summary|truncatewords:30 }}</p>
@@ -90,9 +99,13 @@
                     </div>
                     
                     <div class="recipe-actions">
-                        {% if user_recipe.recipe.recipe_id|slice:":8" != "created_" %}
+                        {% if user_recipe.recipe.recipe_id|slice:":8" == "created_" %}
+                            <a href="{% url 'public_created_recipe_detail' user_recipe.recipe.recipe_id|slice:'8:' %}" class="btn btn-primary">
+                                <i class="bi bi-eye"></i> View Details
+                            </a>
+                        {% else %}
                             <a href="{% url 'recipe_detail' user_recipe.recipe.recipe_id %}" class="btn btn-primary">
-                                View Recipe
+                                <i class="bi bi-eye"></i> View Recipe
                             </a>
                         {% endif %}
                         

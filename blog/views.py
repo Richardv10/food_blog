@@ -53,6 +53,16 @@ def created_recipe_detail(request, recipe_id):
         return redirect('my_recipes')
 
 
+def public_created_recipe_detail(request, recipe_id):
+    """Public view to display a shared created recipe"""
+    try:
+        recipe = CreatedRecipe.objects.get(id=recipe_id, is_shared=True)
+        return render(request, 'public_created_recipe_detail.html', {'recipe': recipe})
+    except CreatedRecipe.DoesNotExist:
+        messages.error(request, 'Recipe not found or not shared.')
+        return redirect('home')
+
+
 @login_required
 def edit_created_recipe(request, recipe_id):
     """View to edit a created recipe"""

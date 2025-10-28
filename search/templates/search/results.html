@@ -1,12 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Search Results</h1>
-{% for recipe in recipes %}
-    <div>
-        <h2>{{ recipe.title }}</h2>
-        <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
-        <a href="{% url 'recipe_detail' recipe.id %}">View Recipe</a>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="search-results-header">
+                <h1 class="results-title">
+                    <i class="bi bi-search me-2"></i>Search Results
+                </h1>
+                <p class="results-count">Found {{ recipes|length }} recipe{{ recipes|length|pluralize }}</p>
+                <a href="{% url 'search_recipes' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left me-2"></i>New Search
+                </a>
+            </div>
+        </div>
     </div>
-{% endfor %}
+
+    {% if recipes %}
+        <div class="row">
+            {% for recipe in recipes %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="recipe-card">
+                        <div class="recipe-image-container">
+                            {% if recipe.image %}
+                                <img src="{{ recipe.image }}" class="recipe-image" alt="{{ recipe.title }}">
+                            {% else %}
+                                <div class="recipe-image-placeholder">
+                                    <i class="bi bi-image"></i>
+                                    <span>No Image</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="recipe-content">
+                            <h3 class="recipe-title">{{ recipe.title }}</h3>
+                            
+                            {% if recipe.readyInMinutes %}
+                                <div class="recipe-meta">
+                                    <span class="meta-item">
+                                        <i class="bi bi-clock me-1"></i>{{ recipe.readyInMinutes }} min
+                                    </span>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="recipe-actions">
+                                <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary w-100">
+                                    <i class="bi bi-eye me-2"></i>View Recipe
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="no-results">
+                    <div class="no-results-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <h3>No recipes found</h3>
+                    <p>Try adjusting your search terms or browse our collection instead.</p>
+                    <div class="mt-3">
+                        <a href="{% url 'search_recipes' %}" class="btn btn-primary me-2">
+                            <i class="bi bi-search me-2"></i>Try Again
+                        </a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-house me-2"></i>Browse Recipes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
