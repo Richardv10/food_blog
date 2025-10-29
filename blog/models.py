@@ -25,11 +25,11 @@ class CreatedRecipe(models.Model):
         return f"{self.title} by {self.creator.username}"
         
     def get_ingredients_list(self):
-        """Return ingredients as a list, split by lines"""
+        #Return ingredients as a list, split by lines
         return [ingredient.strip() for ingredient in self.ingredients.split('\n') if ingredient.strip()]
         
     def get_instructions_list(self):
-        """Return instructions as a list, split by lines or double newlines"""
+        #Return instructions as a list, split by lines or double newlines
         # Split by double newlines first, then single newlines
         instructions = self.instructions.replace('\r\n', '\n')
         steps = [step.strip() for step in instructions.split('\n') if step.strip()]

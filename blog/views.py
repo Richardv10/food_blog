@@ -15,7 +15,7 @@ from blog.models import CreatedRecipe
 
 @login_required
 def create_recipe(request):
-    """View to create a new recipe by the user."""
+    #View to create a new recipe by the user.
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
@@ -27,7 +27,7 @@ def create_recipe(request):
         
         # Create and save the new recipe
         new_recipe = CreatedRecipe.objects.create(
-            creator=request.user,  # Fixed: was 'user', should be 'creator'
+            creator=request.user, 
             title=title,
             description=description,
             ingredients=ingredients,
@@ -37,14 +37,14 @@ def create_recipe(request):
             featured_image=featured_image
         )
         messages.success(request, 'Your recipe has been created successfully!')
-        return redirect('my_recipes')  # Redirect to the unified my_recipes page
+        return redirect('my_recipes')  # Redirect to the my_recipes page
 
-    return render(request, 'create_recipe.html')  # Fixed template path
+    return render(request, 'create_recipe.html') 
 
 
+# View to display a single user created recipe
 @login_required 
 def created_recipe_detail(request, recipe_id):
-    """View to display a single created recipe"""
     try:
         recipe = CreatedRecipe.objects.get(id=recipe_id, creator=request.user)
         return render(request, 'created_recipe_detail.html', {'recipe': recipe})
@@ -53,8 +53,8 @@ def created_recipe_detail(request, recipe_id):
         return redirect('my_recipes')
 
 
+# Public view to display a shared created recipe
 def public_created_recipe_detail(request, recipe_id):
-    """Public view to display a shared created recipe"""
     try:
         recipe = CreatedRecipe.objects.get(id=recipe_id, is_shared=True)
         return render(request, 'public_created_recipe_detail.html', {'recipe': recipe})
@@ -63,9 +63,9 @@ def public_created_recipe_detail(request, recipe_id):
         return redirect('home')
 
 
+# View to edit a created recipe
 @login_required
 def edit_created_recipe(request, recipe_id):
-    """View to edit a created recipe"""
     try:
         recipe = CreatedRecipe.objects.get(id=recipe_id, creator=request.user)
     except CreatedRecipe.DoesNotExist:
@@ -91,9 +91,9 @@ def edit_created_recipe(request, recipe_id):
     return render(request, 'edit_created_recipe.html', {'recipe': recipe})
 
 
+# View to delete a created recipe
 @login_required
 def delete_created_recipe(request, recipe_id):
-    """View to delete a created recipe"""
     try:
         recipe = CreatedRecipe.objects.get(id=recipe_id, creator=request.user)
         recipe.delete()
@@ -103,10 +103,10 @@ def delete_created_recipe(request, recipe_id):
     
     return redirect('my_recipes')
 
-
+# Share a created recipe to the community feed
 @login_required
 def share_created_recipe(request, recipe_id):
-    """Share a created recipe to the community feed"""
+    
     try:
         recipe = CreatedRecipe.objects.get(id=recipe_id, creator=request.user)
     except CreatedRecipe.DoesNotExist:
@@ -118,7 +118,7 @@ def share_created_recipe(request, recipe_id):
         
         # Create a Recipe object for this created recipe if it doesn't exist
         recipe_obj, created = Recipe.objects.get_or_create(
-            recipe_id=f"created_{recipe.id}",  # Unique identifier for created recipes
+            recipe_id=f"created_{recipe.id}",  # Unique identifier for created recipes, won't not clash with API IDs, will have to be handled specially in other views for modularity
             defaults={
                 'title': recipe.title,
                 'image_url': recipe.featured_image.url if recipe.featured_image else None,
@@ -166,9 +166,9 @@ def share_created_recipe(request, recipe_id):
     return redirect('my_recipes')
 
 
+# Remove a created recipe from the community feed
 @login_required 
 def unshare_created_recipe(request, recipe_id):
-    """Remove a created recipe from the community feed"""
     try:
         recipe = CreatedRecipe.objects.get(id=recipe_id, creator=request.user)
         
@@ -190,3 +190,43 @@ def unshare_created_recipe(request, recipe_id):
         messages.error(request, 'Recipe not found.')
     
     return redirect('my_recipes')
+
+
+@login_required
+def rate_created_recipe(request, recipe_id):
+    """Handle rating submission for user-created recipes"""
+    if request.method == 'POST':
+        try:
+            recipe = CreatedRecipe.objects.get(id=recipe_id, is_shared=True)
+            rating_value = int(request.POST.get('rating'))
+            
+            # Validate rating value
+            if rating_value < 1 or rating_value > 5:
+                messages.error(request, 'Rating must be between 1 and 5 stars.')
+                return redirect('public_created_recipe_detail', recipe_id=recipe_id)
+            
+            # Don't allow users to rate their own recipes
+            if recipe.creator == request.user:
+                messages.error(request, 'You cannot rate your own recipe.')
+                return redirect('public_created_recipe_detail', recipe_id=recipe_id)
+            
+            # Create or update the rating
+            rating, created = CreatedRecipeRating.objects.update_or_create(
+                recipe=recipe,
+                user=request.user,
+                defaults={'rating': rating_value}
+            )
+            
+            if created:
+                messages.success(request, f'Thank you for rating "{recipe.title}" with {rating_value} stars!')
+            else:
+                messages.success(request, f'Your rating for "{recipe.title}" has been updated to {rating_value} stars!')
+                
+        except CreatedRecipe.DoesNotExist:
+            messages.error(request, 'Recipe not found or not shared.')
+        except (ValueError, TypeError):
+            messages.error(request, 'Invalid rating value.')
+        
+        return redirect('public_created_recipe_detail', recipe_id=recipe_id)
+    
+    return redirect('home')

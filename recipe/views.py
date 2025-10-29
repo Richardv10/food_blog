@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.utils import timezone
 import requests 
 from .models import Recipe, UserRecipe, RecipeComment
+from blog.models import CreatedRecipe
 
 # Helper function to fetch and cache recipe data
 def get_or_fetch_recipe(recipe_id):
@@ -65,13 +66,14 @@ def get_or_fetch_recipe(recipe_id):
     return recipe_obj, recipe_data
 
 
+# Get all shared recipes for the feed, ordered by most recent
 def home_view(request):
-    # Get all shared recipes for the feed, ordered by most recent
     shared_recipes = UserRecipe.objects.filter(
         is_shared=True
     ).select_related('user', 'recipe').order_by('-shared_at')
     
-    # Get comments for each shared recipe (limit to 3 most recent for feed display)
+# Get comments for each shared recipe (limit to 3 most recent for feed display)
+    
     recipes_with_comments = []
     for shared_recipe in shared_recipes:
         comments = RecipeComment.objects.filter(
@@ -90,9 +92,9 @@ def home_view(request):
     
     return render(request, "home.html", {'recipes_with_comments': recipes_with_comments})
 
+
 # Share recipe to Feed
 def share_recipe(request, recipe_id):
-    """Share a recipe to the homepage feed and cache full recipe data"""
     if request.method == 'POST':
         message = request.POST.get('message', '')
         rating = request.POST.get('rating', None)
@@ -126,12 +128,12 @@ def share_recipe(request, recipe_id):
         
         return redirect('home')
     
-    # GET request - show share form (optional)
+    # GET request - show share form
     return render(request, 'recipe/share_recipe.html', {'recipe_id': recipe_id})
     
 
 
-
+# Search Recipe (default display set to 10)
 def search_recipes(request):
     if request.method == 'POST':
         query = request.POST.get('query')
@@ -148,7 +150,9 @@ def search_recipes(request):
     return render(request, 'search/search.html') 
 
 
+# Display Recipe Details
 def recipe_detail(request, recipe_id):
+
     # Use cached data if available
     recipe_obj, recipe = get_or_fetch_recipe(recipe_id)
     
@@ -169,8 +173,10 @@ def recipe_detail(request, recipe_id):
         'comments': comments
     })
 
+
+# Get a random recipe from Spoonacular API and cache it
 def random_recipe(request):
-    """Get a random recipe from Spoonacular API and cache it"""
+    
     url = "https://api.spoonacular.com/recipes/random"
     params = {
         'apiKey': settings.SPOONACULAR_API_KEY,
@@ -187,14 +193,14 @@ def random_recipe(request):
     
     return render(request, 'search/detail.html', {'recipe': recipe})
 
-# Save Recipe to User's Favorites
 
+# Save Recipe to User's Favorites
 def save_recipe(request, recipe_id):
-    """Save a recipe to the user's collection and cache full recipe data"""
+    
     # Use helper to fetch and cache recipe data
     recipe_obj, recipe_data = get_or_fetch_recipe(recipe_id)
     
-    # Add to user's library (or get if already exists)
+    # Get or Create UserRecipe entry
     user_recipe, created = UserRecipe.objects.get_or_create(
         user=request.user,
         recipe=recipe_obj
@@ -207,18 +213,16 @@ def save_recipe(request, recipe_id):
     
     return redirect('recipe_detail', recipe_id=recipe_id)
 
+
 # Display User Recipes
 
 def my_recipes(request):
+    
     # Get saved recipes, excluding user's own created recipes that were shared
     saved_recipes = UserRecipe.objects.filter(
-        user=request.user
-    ).exclude(
-        recipe__recipe_id__startswith='created_'
-    ).order_by('-created_at')
+        user=request.user).exclude(recipe__recipe_id__startswith='created_').order_by('-created_at')
     
-    # Import here to avoid circular imports
-    from blog.models import CreatedRecipe
+    # Get user's created recipes
     created_recipes = CreatedRecipe.objects.filter(creator=request.user).order_by('-created_at')
     
     return render(request, 'recipe/my_recipes.html', {
@@ -226,19 +230,23 @@ def my_recipes(request):
         'created_recipes': created_recipes
     })
 
+
 # Delete Recipe from User's Favorites
-#  
+
 def delete_recipe(request, recipe_id):
         user_recipe = UserRecipe.objects.get(user=request.user, recipe__recipe_id=str(recipe_id))
         user_recipe.delete()
         messages.success(request, "Recipe deleted from your favorites.")
         return redirect('my_recipes')
 
+
+# Make Comment on Recipe
 def make_comment(request, recipe_id):
     if request.method == 'POST':
         comment_text = request.POST.get('comment')
         rating = request.POST.get('rating', None)
         recipe_obj, _ = get_or_fetch_recipe(recipe_id)
+
 # Create the comment
         RecipeComment.objects.create(
             recipe=recipe_obj,
@@ -252,15 +260,14 @@ def make_comment(request, recipe_id):
     return redirect('recipe_detail', recipe_id=recipe_id)
 
 
+# Handle comments submitted from the home feed
 def make_feed_comment(request, recipe_id):
-    """Handle comments submitted from the home feed"""
+    
     if request.method == 'POST' and request.user.is_authenticated:
         comment_text = request.POST.get('comment')
         
         if comment_text:
             try:
-                # For our unified system, just get the Recipe object directly
-                # since all shared recipes (API and created) exist as Recipe objects
                 recipe_obj = Recipe.objects.get(recipe_id=str(recipe_id))
                 
                 # Create the comment
