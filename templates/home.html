@@ -2,183 +2,187 @@
 
 {% block content %}
 
-<h1>Welcome to Recipe Room</h1>
-{% if user.is_authenticated %}
-<h2>Welcome back, {{ user.username }}!</h2>
-{% endif %}
-
-
-
-<p>Discover and share amazing recipes with the community! <br> Try searching for your favorite dishes, and share them with the room, <br> or create your own and build your library of favorites</p>
+<div class="content-wrapper">
+    <div class="text-center mb-5">
+        <h1>Welcome to Recipe Room</h1>
+        {% if user.is_authenticated %}
+        <h2>Welcome back, {{ user.username }}!</h2>
+        {% endif %}
+        <p class="text-muted">Discover and share amazing recipes with the community! Try searching for your favorite dishes, and share them with the room, or create your own and build your library of favorites</p>
+    </div>
+</div>
 
 <!-- Feed of shared recipes -->
 <div class="feed-container">
-    <h2>Community Recipe Feed</h2>
-    
-    {% if recipes_with_comments %}
-        {% for item in recipes_with_comments %}
-            {% with user_recipe=item.shared_recipe %}
-            <div class="recipe-card">
-                <div class="card-header">
-                    <strong>{{ user_recipe.user.username }}</strong> shared a recipe
-                    <small class="text-muted">{{ user_recipe.shared_at|timesince }} ago</small>
-                    
-                    <!-- Check if this is a user-created recipe by the recipe_id prefix -->
-                    {% if user_recipe.recipe.recipe_id|slice:":8" == "created_" %}
-                        <span class="badge bg-success ms-2">Original Recipe</span>
-                    {% else %}
-                        <span class="badge bg-info ms-2">From Search</span>
-                    {% endif %}
-                </div>
-                <div class="card-body">
-                    <!-- Handle different recipe types -->
-                    {% if user_recipe.recipe.recipe_id|slice:":8" == "created_" %}
-                        <!-- This is a user-created recipe -->
-                        <h4>
-                            <a href="{% url 'public_created_recipe_detail' user_recipe.recipe.recipe_id|slice:'8:' %}">
-                                {{ user_recipe.recipe.title }}
-                            </a>
-                        </h4>
-                        
-                        {% if user_recipe.recipe.summary %}
-                        <p class="recipe-description">{{ user_recipe.recipe.summary|truncatewords:30 }}</p>
-                        {% endif %}
-                        
-                        {% if user_recipe.message %}
-                        <p class="message">{{ user_recipe.message }}</p>
-                        {% endif %}
-                        
-                        {% if user_recipe.recipe.image_url %}
-                            <img src="{{ user_recipe.recipe.image_url }}" alt="{{ user_recipe.recipe.title }}" class="recipe-image">
-                        {% else %}
-                            <div class="recipe-image-placeholder">
-                                <span class="text-muted">No Image</span>
+    <div class="content-wrapper">
+        <h2 class="mb-4">Community Recipe Feed</h2>
+        
+        {% if recipes_with_comments %}
+            {% for item in recipes_with_comments %}
+                {% with user_recipe=item.shared_recipe %}
+                <div class="recipe-card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="mb-1">{{ user_recipe.user.username }}</h3>
+                            <p class="meta-info">shared a recipe {{ user_recipe.shared_at|timesince }} ago</p>
+                        </div>
+                        <div>
+                            <!-- Check if this is a user-created recipe by the recipe_id prefix -->
+                            {% if user_recipe.recipe.recipe_id|slice:":8" == "created_" %}
+                                <span class="badge badge-success">Original Recipe</span>
+                            {% else %}
+                                <span class="badge badge-info">From Search</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Handle different recipe types -->
+                        {% if user_recipe.recipe.recipe_id|slice:":8" == "created_" %}
+                            <!-- This is a user-created recipe -->
+                            <div class="recipe-title">
+                                <a href="{% url 'public_created_recipe_detail' user_recipe.recipe.recipe_id|slice:'8:' %}">
+                                    {{ user_recipe.recipe.title }}
+                                </a>
                             </div>
+                            
+                            {% if user_recipe.recipe.summary %}
+                            <p class="recipe-description">{{ user_recipe.recipe.summary|truncatewords:30 }}</p>
+                            {% endif %}
+                            
+                            {% if user_recipe.message %}
+                            <div class="alert alert-info">{{ user_recipe.message }}</div>
+                            {% endif %}
+                            
+                            {% if user_recipe.recipe.image_url %}
+                                <img src="{{ user_recipe.recipe.image_url }}" alt="{{ user_recipe.recipe.title }}" class="recipe-image">
+                            {% endif %}
+                            
+                        {% else %}
+                            <!-- This is an API recipe -->
+                            <div class="recipe-title">
+                                <a href="{% url 'recipe_detail' user_recipe.recipe.recipe_id %}">
+                                    {{ user_recipe.recipe.title }}
+                                </a>
+                            </div>
+                            
+                            {% if user_recipe.rating %}
+                            <div class="mb-3">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= user_recipe.rating %}
+                                        ⭐
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="text-muted">({{ user_recipe.rating }}/5)</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if user_recipe.message %}
+                            <div class="alert alert-info">{{ user_recipe.message }}</div>
+                            {% endif %}
+                            
+                            <img src="https://spoonacular.com/recipeImages/{{ user_recipe.recipe.recipe_id }}-312x231.jpg" 
+                                 alt="{{ user_recipe.recipe.title }}" class="recipe-image">
                         {% endif %}
                         
-                    {% else %}
-                        <!-- This is an API recipe -->
-                        <h4>
-                            <a href="{% url 'recipe_detail' user_recipe.recipe.recipe_id %}">
-                                {{ user_recipe.recipe.title }}
-                            </a>
-                        </h4>
-                        
-                        {% if user_recipe.rating %}
-                        <div class="rating">
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= user_recipe.rating %}
-                                    ⭐
-                                {% endif %}
-                            {% endfor %}
-                            ({{ user_recipe.rating }}/5)
+                        <!-- Recipe meta info (common for both types) -->
+                        {% if user_recipe.recipe.servings or user_recipe.recipe.ready_in_minutes %}
+                        <div class="d-flex gap-3 mb-3 text-muted">
+                            {% if user_recipe.recipe.servings %}
+                            <small>
+                                <i class="bi bi-people"></i> {{ user_recipe.recipe.servings }} servings
+                            </small>
+                            {% endif %}
+                            
+                            {% if user_recipe.recipe.ready_in_minutes %}
+                            <small>
+                                <i class="bi bi-clock"></i> {{ user_recipe.recipe.ready_in_minutes }} mins
+                            </small>
+                            {% endif %}
                         </div>
                         {% endif %}
                         
-                        {% if user_recipe.message %}
-                        <p class="message">{{ user_recipe.message }}</p>
-                        {% endif %}
-                        
-                        <img src="https://spoonacular.com/recipeImages/{{ user_recipe.recipe.recipe_id }}-312x231.jpg" 
-                             alt="{{ user_recipe.recipe.title }}" class="recipe-image">
-                    {% endif %}
-                    
-                    <!-- Recipe meta info (common for both types) -->
-                    <div class="recipe-meta mt-2">
-                        {% if user_recipe.recipe.servings %}
-                        <small class="text-muted">
-                            <i class="bi bi-people"></i> {{ user_recipe.recipe.servings }} servings
-                        </small>
-                        {% endif %}
-                        
-                        {% if user_recipe.recipe.ready_in_minutes %}
-                        <small class="text-muted ms-2">
-                            <i class="bi bi-clock"></i> {{ user_recipe.recipe.ready_in_minutes }} mins
-                        </small>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="recipe-actions">
-                        {% if user_recipe.recipe.recipe_id|slice:":8" == "created_" %}
-                            <a href="{% url 'public_created_recipe_detail' user_recipe.recipe.recipe_id|slice:'8:' %}" class="btn btn-primary">
-                                <i class="bi bi-eye"></i> View Details
-                            </a>
-                        {% else %}
-                            <a href="{% url 'recipe_detail' user_recipe.recipe.recipe_id %}" class="btn btn-primary">
-                                <i class="bi bi-eye"></i> View Recipe
-                            </a>
-                        {% endif %}
-                        
-                        <!-- Comments toggle button -->
-                        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" 
-                                data-bs-target="#comments-{{ user_recipe.recipe.recipe_id }}" aria-expanded="false">
-                            <i class="bi bi-chat-dots"></i> Comments ({{ item.comment_count }})
-                        </button>
-                    </div>
-                    
-                    <!-- Collapsible Comments Section (unified for both types) -->
-                    <div class="collapse mt-3" id="comments-{{ user_recipe.recipe.recipe_id }}">
-                        <div class="comments-section">
-                            <h6>Comments</h6>
+                        <div class="recipe-actions">
+                            {% if user_recipe.recipe.recipe_id|slice:":8" == "created_" %}
+                                <a href="{% url 'public_created_recipe_detail' user_recipe.recipe.recipe_id|slice:'8:' %}" class="btn btn-primary">
+                                    <i class="bi bi-eye"></i> View Details
+                                </a>
+                            {% else %}
+                                <a href="{% url 'recipe_detail' user_recipe.recipe.recipe_id %}" class="btn btn-primary">
+                                    <i class="bi bi-eye"></i> View Recipe
+                                </a>
+                            {% endif %}
                             
-                            <!-- Existing Comments -->
-                            {% if item.recent_comments %}
-                                {% for comment in item.recent_comments %}
-                                <div class="comment mb-2">
-                                    <div class="comment-header">
-                                        <strong>{{ comment.user.username }}</strong>
-                                        <small class="text-muted">{{ comment.created_at|timesince }} ago</small>
-                                    </div>
-                                    <div class="comment-body">
-                                        {{ comment.comment }}
-                                    </div>
-                                </div>
-                                {% endfor %}
+                            <!-- Comments toggle button -->
+                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#comments-{{ user_recipe.recipe.recipe_id }}" aria-expanded="false">
+                                <i class="bi bi-chat-dots"></i> Comments ({{ item.comment_count }})
+                            </button>
+                        </div>
+                        
+                        <!-- Collapsible Comments Section (unified for both types) -->
+                        <div class="collapse" id="comments-{{ user_recipe.recipe.recipe_id }}">
+                            <div class="comments-section">
+                                <h6 class="comments-title">Comments</h6>
                                 
-                                {% if item.comment_count > 3 %}
-                                <p class="text-muted">
-                                    {% if user_recipe.recipe.recipe_id|slice:":8" != "created_" %}
-                                        <a href="{% url 'recipe_detail' user_recipe.recipe.recipe_id %}">
-                                            View all {{ item.comment_count }} comments...
-                                        </a>
-                                    {% else %}
-                                        <span>{{ item.comment_count }} total comments</span>
+                                <!-- Existing Comments -->
+                                {% if item.recent_comments %}
+                                    {% for comment in item.recent_comments %}
+                                    <div class="comment">
+                                        <div class="comment-header">
+                                            <span class="comment-author">{{ comment.user.username }}</span>
+                                            <span class="comment-date">{{ comment.created_at|timesince }} ago</span>
+                                        </div>
+                                        <div class="comment-content">
+                                            {{ comment.comment }}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    
+                                    {% if item.comment_count > 3 %}
+                                    <p class="text-muted">
+                                        {% if user_recipe.recipe.recipe_id|slice:":8" != "created_" %}
+                                            <a href="{% url 'recipe_detail' user_recipe.recipe.recipe_id %}">
+                                                View all {{ item.comment_count }} comments...
+                                            </a>
+                                        {% else %}
+                                            <span>{{ item.comment_count }} total comments</span>
+                                        {% endif %}
+                                    </p>
                                     {% endif %}
+                                {% else %}
+                                    <p class="text-muted">No comments yet. Be the first to comment!</p>
+                                {% endif %}
+                                
+                                <!-- Add Comment Form (unified for both types) -->
+                                {% if user.is_authenticated %}
+                                <form method="post" action="{% url 'make_feed_comment' user_recipe.recipe.recipe_id %}">
+                                    {% csrf_token %}
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="comment" 
+                                               placeholder="Add a comment..." required>
+                                        <button class="btn btn-primary" type="submit">Post</button>
+                                    </div>
+                                </form>
+                                {% else %}
+                                <p class="text-muted">
+                                    <a href="{% url 'account_login' %}">Log in</a> to add a comment.
                                 </p>
                                 {% endif %}
-                            {% else %}
-                                <p class="text-muted">No comments yet. Be the first to comment!</p>
-                            {% endif %}
-                            
-                            <!-- Add Comment Form (unified for both types) -->
-                            {% if user.is_authenticated %}
-                            <form method="post" action="{% url 'make_feed_comment' user_recipe.recipe.recipe_id %}" class="mt-3">
-                                {% csrf_token %}
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="comment" 
-                                           placeholder="Add a comment..." required>
-                                    <button class="btn btn-outline-primary" type="submit">Post</button>
-                                </div>
-                            </form>
-                            {% else %}
-                            <p class="text-muted mt-3">
-                                <a href="{% url 'account_login' %}">Log in</a> to add a comment.
-                            </p>
-                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endwith %}
+            {% endfor %}
+        {% else %}
+            <div class="content-wrapper text-center">
+                <h4>No Recipes Shared Yet</h4>
+                <p class="text-muted mb-4">Be the first to share a recipe with the community!</p>
+                <a href="{% url 'search_recipes' %}" class="btn btn-primary me-3">Search for Recipes</a>
+                <a href="{% url 'create_recipe' %}" class="btn btn-success">Create Your Own Recipe</a>
             </div>
-            {% endwith %}
-        {% endfor %}
-    {% else %}
-        <div class="text-center py-5">
-            <h4>No Recipes Shared Yet</h4>
-            <p class="text-muted">Be the first to share a recipe with the community!</p>
-            <a href="{% url 'search_recipes' %}" class="btn btn-primary me-2">Search for Recipes</a>
-            <a href="{% url 'create_recipe' %}" class="btn btn-success">Create Your Own Recipe</a>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}

@@ -189,44 +189,4 @@ def unshare_created_recipe(request, recipe_id):
     except CreatedRecipe.DoesNotExist:
         messages.error(request, 'Recipe not found.')
     
-    return redirect('my_recipes')
-
-
-@login_required
-def rate_created_recipe(request, recipe_id):
-    """Handle rating submission for user-created recipes"""
-    if request.method == 'POST':
-        try:
-            recipe = CreatedRecipe.objects.get(id=recipe_id, is_shared=True)
-            rating_value = int(request.POST.get('rating'))
-            
-            # Validate rating value
-            if rating_value < 1 or rating_value > 5:
-                messages.error(request, 'Rating must be between 1 and 5 stars.')
-                return redirect('public_created_recipe_detail', recipe_id=recipe_id)
-            
-            # Don't allow users to rate their own recipes
-            if recipe.creator == request.user:
-                messages.error(request, 'You cannot rate your own recipe.')
-                return redirect('public_created_recipe_detail', recipe_id=recipe_id)
-            
-            # Create or update the rating
-            rating, created = CreatedRecipeRating.objects.update_or_create(
-                recipe=recipe,
-                user=request.user,
-                defaults={'rating': rating_value}
-            )
-            
-            if created:
-                messages.success(request, f'Thank you for rating "{recipe.title}" with {rating_value} stars!')
-            else:
-                messages.success(request, f'Your rating for "{recipe.title}" has been updated to {rating_value} stars!')
-                
-        except CreatedRecipe.DoesNotExist:
-            messages.error(request, 'Recipe not found or not shared.')
-        except (ValueError, TypeError):
-            messages.error(request, 'Invalid rating value.')
-        
-        return redirect('public_created_recipe_detail', recipe_id=recipe_id)
-    
-    return redirect('home')
+    return redirect('my_recipes')  
