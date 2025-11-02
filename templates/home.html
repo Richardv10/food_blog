@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+{% load static %}
+<style>
+.main-container {
+    background-image: url('{% static "images/burrito.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+</style>
 <!-- Landing Zone / My Recipes Section -->
 {% if user.is_authenticated %}
     <!-- My Recipes Section for Logged In Users -->
