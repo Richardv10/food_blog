@@ -1,12 +1,11 @@
 /* Google Fonts Import */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@300;400;500;600;700&display=swap');
 
-
 /* ============================================
    CSS VARIABLES
    ============================================ */
 :root {
-    /* Colors - Love & Lemons inspired palette */
+    /* Colors */
     --primary-color: #7fb069;
     --secondary-color: #a7c957;
     --accent-color: #f2e8cf;
@@ -14,8 +13,9 @@
     --danger-color: #e76f51;
     --warning-color: #f4a261;
     --info-color: #264653;
+    --card-bg: #fef9f0;
     
-    /* Grays - Softer, warmer tones */
+    /* Grays */
     --gray-50: #fafafa;
     --gray-100: #f5f5f5;
     --gray-200: #eeeeee;
@@ -27,7 +27,7 @@
     --gray-800: #424242;
     --gray-900: #212121;
     
-    /* Typography - More elegant fonts */
+    /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-family-heading: 'Playfair Display', Georgia, serif;
     --font-size-xs: 0.75rem;
@@ -39,7 +39,7 @@
     --font-size-3xl: 1.875rem;
     --font-size-4xl: 2.25rem;
     
-    /* Spacing - More generous */
+    /* Spacing */
     --spacing-xs: 0.375rem;
     --spacing-sm: 0.75rem;
     --spacing-md: 1.25rem;
@@ -48,12 +48,12 @@
     --spacing-2xl: 3.5rem;
     --spacing-3xl: 4.5rem;
     
-    /* Border radius - Softer, more rounded */
+    /* Border radius */
     --border-radius: 0.75rem;
     --border-radius-lg: 1rem;
     --border-radius-xl: 1.5rem;
     
-    /* Shadows - Softer, more subtle */
+    /* Shadows */
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -73,9 +73,11 @@ body {
     font-size: var(--font-size-base);
     line-height: 1.7;
     color: var(--gray-700);
-    background-color: var(--gray-50);
+    background-image: url('../images/burrito.jpg');
+    background-repeat: repeat;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -134,7 +136,6 @@ a {
    LAYOUT COMPONENTS
    ============================================ */
 .main-container {
-    max-width: 1200px;
     margin: 0 auto;
     padding: var(--spacing-xl) var(--spacing-lg);
 }
@@ -144,6 +145,15 @@ a {
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-2xl);
     margin-bottom: var(--spacing-xl);
+}
+
+/* For screens 768px and above, limit the width */
+@media (min-width: 768px) {
+    .content-wrapper {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 /* ============================================
@@ -184,10 +194,6 @@ a {
     border-radius: var(--border-radius);
 }
 
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-}
-
 .dropdown-menu {
     border: 2px solid var(--gray-200);
     box-shadow: var(--shadow-lg);
@@ -201,7 +207,7 @@ a {
 }
 
 /* ============================================
-   BUTTONS - LOVE & LEMONS INSPIRED
+   BUTTONS
    ============================================ */
 .btn {
     font-family: inherit;
@@ -220,7 +226,6 @@ a {
     box-shadow: var(--shadow-sm);
     letter-spacing: 0.025em;
 }
-
 
 .btn-primary {
     background-color: var(--primary-color);
@@ -347,7 +352,7 @@ a {
    CARDS & CONTENT BLOCKS
    ============================================ */
 .recipe-card {
-    background: white;
+    background: var(--card-bg);
     border: 1px solid var(--gray-200);
     border-radius: var(--border-radius-lg);
     margin-bottom: var(--spacing-2xl);
@@ -375,6 +380,7 @@ a {
 
 .card-body {
     padding: var(--spacing-xl);
+    background: var(--card-bg);
 }
 
 .recipe-title {
@@ -404,7 +410,7 @@ a {
     border: 1px solid var(--gray-200);
 }
 
-/* New Feed Layout Styles */
+/* Feed Layout Styles - CONSISTENT IMAGE SIZING */
 .feed-recipe-image {
     width: 100% !important;
     height: 200px !important;
@@ -436,7 +442,6 @@ a {
     font-size: var(--font-size-sm);
 }
 
-/* Image column container constraints */
 .recipe-card .card-body .row > div:first-child {
     overflow: hidden;
     display: flex;
@@ -519,6 +524,141 @@ a {
 }
 
 /* ============================================
+   ALERTS & MESSAGES
+   ============================================ */
+.alert {
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    border: 1px solid transparent;
+    margin-bottom: var(--spacing-lg);
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-muted { color: var(--gray-500); }
+.text-primary { color: var(--primary-color); }
+.text-secondary { color: var(--secondary-color); }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--spacing-xs); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
+.mb-5 { margin-bottom: var(--spacing-xl); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--spacing-xs); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+.mt-5 { margin-top: var(--spacing-xl); }
+
+.p-0 { padding: 0; }
+.p-1 { padding: var(--spacing-xs); }
+.p-2 { padding: var(--spacing-sm); }
+.p-3 { padding: var(--spacing-md); }
+.p-4 { padding: var(--spacing-lg); }
+.p-5 { padding: var(--spacing-xl); }
+
+.w-100 { width: 100%; }
+.h-100 { height: 100%; }
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .main-container {
+        padding: var(--spacing-md);
+    }
+    
+    .content-wrapper {
+        padding: var(--spacing-lg);
+    }
+    
+    .recipe-actions {
+        flex-direction: column;
+    }
+    
+    .recipe-actions .btn {
+        width: 100%;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    h1 { font-size: var(--font-size-2xl); }
+    h2 { font-size: var(--font-size-xl); }
+    
+    .card-header {
+        text-align: center;
+    }
+    
+    .feed-recipe-image {
+        height: 150px !important;
+        min-height: 150px !important;
+        max-height: 150px !important;
+    }
+    
+    .feed-recipe-placeholder {
+        height: 150px;
+    }
+    
+    .card-body .row {
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: var(--font-size-lg);
+    }
+    
+    .btn {
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .recipe-image {
+        max-width: 100%;
+    }
+    
+    .input-group {
+        flex-direction: column;
+    }
+}
+
+.input-group .form-control {
+    flex: 1;
+}
+
+/* ============================================
    COMMENTS SECTION
    ============================================ */
 .comments-section {
@@ -537,7 +677,7 @@ a {
 }
 
 .comment {
-    background: white;
+    background: var(--card-bg);
     border: 2px solid var(--gray-300);
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
@@ -577,7 +717,7 @@ a {
 }
 
 .auth-card {
-    background: white;
+    background: var(--card-bg);
     border: 3px solid var(--gray-400);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-lg);
@@ -627,7 +767,7 @@ a {
 }
 
 .search-form {
-    background: white;
+    background: var(--card-bg);
     border: 3px solid var(--gray-400);
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-xl);
@@ -721,10 +861,12 @@ a {
 @media (max-width: 768px) {
     .main-container {
         padding: var(--spacing-md);
+        max-width: 100%;
     }
     
     .content-wrapper {
         padding: var(--spacing-lg);
+        min-width: 100%;
     }
     
     .recipe-actions {
@@ -779,6 +921,13 @@ a {
 }
 
 @media (max-width: 576px) {
+   .content-wrapper {
+        min-width: 100%;
+    }
+   
+   
+   
+   
     .navbar-brand {
         font-size: var(--font-size-lg);
     }
