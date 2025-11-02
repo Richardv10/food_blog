@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('about/', views.about_view, name='about'),
     path('create/', views.create_recipe, name='create_recipe'),
     path('recipe/<int:recipe_id>/', views.created_recipe_detail, name='created_recipe_detail'),
     path('recipe/<int:recipe_id>/public/', views.public_created_recipe_detail, name='public_created_recipe_detail'),

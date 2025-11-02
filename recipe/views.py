@@ -68,6 +68,33 @@ def get_or_fetch_recipe(recipe_id):
 
 # Get all shared recipes for the feed, ordered by most recent
 def home_view(request):
+    # Get featured recipes (random recipes for carousel)
+    featured_recipes = []
+    try:
+        url = "https://api.spoonacular.com/recipes/random"
+        params = {
+            'apiKey': settings.SPOONACULAR_API_KEY,
+            'number': 5  # Get 5 random recipes for carousel
+        }
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            data = response.json()
+            for recipe_data in data.get('recipes', []):
+                # Fix image URL
+                recipe_data['image'] = f"https://spoonacular.com/recipeImages/{recipe_data['id']}-312x231.jpg"
+                featured_recipes.append(recipe_data)
+    except Exception as e:
+        # If API fails, continue without featured recipes
+        print(f"Error fetching featured recipes: {e}")
+    
+    # Get user's recipes if authenticated
+    saved_recipes = None
+    created_recipes = None
+    if request.user.is_authenticated:
+        saved_recipes = UserRecipe.objects.filter(
+            user=request.user).exclude(recipe__recipe_id__startswith='created_').order_by('-created_at')
+        created_recipes = CreatedRecipe.objects.filter(creator=request.user).order_by('-created_at')
+    
     shared_recipes = UserRecipe.objects.filter(
         is_shared=True
     ).select_related('user', 'recipe').order_by('-shared_at')
@@ -90,7 +117,12 @@ def home_view(request):
             'comment_count': comment_count
         })
     
-    return render(request, "home.html", {'recipes_with_comments': recipes_with_comments})
+    return render(request, "home.html", {
+        'recipes_with_comments': recipes_with_comments,
+        'featured_recipes': featured_recipes,
+        'saved_recipes': saved_recipes,
+        'created_recipes': created_recipes
+    })
 
 
 # Share recipe to Feed

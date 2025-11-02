@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}About - Food Blog{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- About Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 text-success mb-3">About Our Food Blog</h1>
+                <p class="lead text-muted">Discover the passion behind our culinary community</p>
+            </div>
+
+            <!-- Main About Content -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h3 text-success mb-4">Our Story</h2>
+                    <p class="mb-4">
+                        Welcome to our food blog community! We're passionate food enthusiasts who believe that great recipes 
+                        should be shared, celebrated, and enjoyed by everyone. Our platform brings together home cooks, 
+                        professional chefs, and food lovers from around the world.
+                    </p>
+                    <p class="mb-4">
+                        Whether you're looking for quick weeknight dinners, elaborate weekend projects, or healthy meal prep 
+                        ideas, you'll find inspiration here. Our community-driven approach means every recipe is tested, 
+                        reviewed, and loved by real people in real kitchens.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="h5 text-success mb-3">
+                                <i class="fas fa-search me-2"></i>Discover Recipes
+                            </h3>
+                            <p class="card-text">
+                                Browse through thousands of recipes from our community and discover new favorites 
+                                with our powerful search and filtering tools.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="h5 text-success mb-3">
+                                <i class="fas fa-plus-circle me-2"></i>Share Your Creations
+                            </h3>
+                            <p class="card-text">
+                                Create and share your own recipes with detailed instructions, photos, and tips 
+                                to help others recreate your culinary masterpieces.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="h5 text-success mb-3">
+                                <i class="fas fa-users me-2"></i>Join the Community
+                            </h3>
+                            <p class="card-text">
+                                Connect with fellow food lovers, share cooking tips, and get inspired by 
+                                the creativity and passion of our amazing community.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="h5 text-success mb-3">
+                                <i class="fas fa-star me-2"></i>Rate & Review
+                            </h3>
+                            <p class="card-text">
+                                Help others find the best recipes by rating and reviewing dishes you've tried. 
+                                Your feedback makes our community stronger.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mission Statement -->
+            <div class="card bg-light shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="h3 text-success mb-4">Our Mission</h2>
+                    <p class="mb-3">
+                        <strong>To make cooking accessible, enjoyable, and social for everyone.</strong>
+                    </p>
+                    <p class="mb-0">
+                        We believe that food brings people together, and that everyone has something delicious to share. 
+                        Our platform is designed to break down barriers, encourage experimentation, and celebrate the 
+                        joy of cooking in all its forms.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="text-center mt-5">
+                <h3 class="h4 mb-3">Ready to start your culinary journey?</h3>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'account_signup' %}" class="btn btn-success btn-lg me-3">Join Our Community</a>
+                <a href="{% url 'account_login' %}" class="btn btn-outline-success btn-lg">Sign In</a>
+                {% else %}
+                <a href="{% url 'create_recipe' %}" class="btn btn-success btn-lg me-3">Create Your First Recipe</a>
+                <a href="{% url 'search_recipes' %}" class="btn btn-outline-success btn-lg">Explore Recipes</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

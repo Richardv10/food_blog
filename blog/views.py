@@ -13,6 +13,10 @@ from blog.models import CreatedRecipe
 
 # Create your views here.
 
+def about_view(request):
+    """View to display the about page."""
+    return render(request, 'about.html')
+
 @login_required
 def create_recipe(request):
     #View to create a new recipe by the user.
