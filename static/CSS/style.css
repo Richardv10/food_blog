@@ -73,7 +73,7 @@ body {
     font-size: var(--font-size-base);
     line-height: 1.7;
     color: var(--gray-700);
-    background-image: url('/burrito.jpg');
+    background-image: url('/static/images/burrito.jpg');
     background-repeat: repeat;
     margin: 0;
     padding: 0;
