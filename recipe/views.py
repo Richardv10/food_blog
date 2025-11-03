@@ -70,22 +70,25 @@ def get_or_fetch_recipe(recipe_id):
 def home_view(request):
     # Get featured recipes (random recipes for carousel)
     featured_recipes = []
-    try:
-        url = "https://api.spoonacular.com/recipes/random"
-        params = {
-            'apiKey': settings.SPOONACULAR_API_KEY,
-            'number': 5  # Get 5 random recipes for carousel
-        }
-        response = requests.get(url, params=params)
-        if response.status_code == 200:
-            data = response.json()
-            for recipe_data in data.get('recipes', []):
-                # Fix image URL
-                recipe_data['image'] = f"https://spoonacular.com/recipeImages/{recipe_data['id']}-312x231.jpg"
-                featured_recipes.append(recipe_data)
-    except Exception as e:
-        # If API fails, continue without featured recipes
-        print(f"Error fetching featured recipes: {e}")
+    
+    # Only fetch featured recipes if enabled in settings (for development)
+    if settings.ENABLE_FEATURED_RECIPES:
+        try:
+            url = "https://api.spoonacular.com/recipes/random"
+            params = {
+                'apiKey': settings.SPOONACULAR_API_KEY,
+                'number': 5  # Get 5 random recipes for carousel
+            }
+            response = requests.get(url, params=params)
+            if response.status_code == 200:
+                data = response.json()
+                for recipe_data in data.get('recipes', []):
+                    # Fix image URL
+                    recipe_data['image'] = f"https://spoonacular.com/recipeImages/{recipe_data['id']}-312x231.jpg"
+                    featured_recipes.append(recipe_data)
+        except Exception as e:
+            # If API fails, continue without featured recipes
+            print(f"Error fetching featured recipes: {e}")
     
     # Get user's recipes if authenticated
     saved_recipes = None
