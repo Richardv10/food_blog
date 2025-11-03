@@ -103,6 +103,7 @@ h2 {
     font-size: var(--font-size-3xl); 
     font-weight: 400;
     margin-bottom: var(--spacing-lg);
+    color: var(--info-color);
 }
 h3 { 
     font-size: var(--font-size-2xl); 
@@ -130,6 +131,10 @@ p {
 a {
     color: var(--primary-color);
     text-decoration: none;
+}
+
+#welcome-heading {
+    color: var(--info-color) !important;
 }
 
 /* ============================================
@@ -351,6 +356,16 @@ a {
 /* ============================================
    CARDS & CONTENT BLOCKS
    ============================================ */
+
+#user-comment-box {
+    background-color: #fef9f0;
+    border-color: #bee5eb;
+    color: var(--info-color);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius);
+    border: 1px solid transparent;
+}
+
 .recipe-card {
     background: var(--card-bg);
     border: 1px solid var(--gray-200);
@@ -809,9 +824,9 @@ a {
 }
 
 .alert-info {
-    background-color: #d1ecf1;
+    background-color: #fef9f0;
     border-color: #bee5eb;
-    color: #0c5460;
+    color: #fef9f0;
 }
 
 .alert-warning {
