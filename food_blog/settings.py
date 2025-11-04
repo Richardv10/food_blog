@@ -29,8 +29,7 @@ DEBUG = False
 
 # Development toggle - set to False to disable API calls during development
 # This prevents constant API calls when refreshing the page during development
-# REMEMBER: Set back to True before deployment!
-ENABLE_FEATURED_RECIPES = True  # Toggle this: False = no API calls, True = fetch featured recipes
+ENABLE_FEATURED_RECIPES = True  
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
 

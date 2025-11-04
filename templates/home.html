@@ -78,6 +78,7 @@
                     
                     <!-- Created Recipes Tab -->
                     <div class="tab-pane fade" id="created-recipes" role="tabpanel" aria-labelledby="created-tab">
+                        {% if created_recipes %}
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div></div>
                             <a href="{% url 'create_recipe' %}" class="btn btn-success">
@@ -85,7 +86,6 @@
                             </a>
                         </div>
                         
-                        {% if created_recipes %}
                             <div class="row g-4">
                                 {% for recipe in created_recipes %}
                                 <div class="col-lg-4 col-md-6 mb-4">
@@ -250,7 +250,7 @@
 <!--<div class="featured-section py-5 bg-light"> -->
     <div class="content-wrapper">
         <div class="text-center mb-5">
-            <h2 class="display-6 text-success mb-3">Featured Recipes</h2>
+            <h2>Featured Recipes</h2>
             <p class="text-muted">Discover delicious recipes from our community</p>
         </div>
         
