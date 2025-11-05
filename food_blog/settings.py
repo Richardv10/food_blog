@@ -28,8 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = False
 
 # Development toggle - set to False to disable API calls during development
-# This prevents constant API calls when refreshing the page during development
-ENABLE_FEATURED_RECIPES = True  
+# This prevents constant API calls when refreshing the page.
+ENABLE_FEATURED_RECIPES = True 
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
 

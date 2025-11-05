@@ -317,3 +317,80 @@ def make_feed_comment(request, recipe_id):
                 messages.error(request, "Recipe not found.")
     
     return redirect('home')
+
+
+# Edit comment
+def edit_comment(request, comment_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to edit comments.")
+        return redirect('account_login')
+    
+    try:
+        comment = RecipeComment.objects.get(id=comment_id)
+        
+        # Check if the user owns this comment
+        if comment.user != request.user:
+            messages.error(request, "You can only edit your own comments.")
+            return redirect('home')
+        
+        if request.method == 'POST':
+            comment_text = request.POST.get('comment')
+            if comment_text:
+                comment.comment = comment_text
+                comment.save()
+                messages.success(request, "Your comment has been updated.")
+            else:
+                messages.error(request, "Comment cannot be empty.")
+        
+    except RecipeComment.DoesNotExist:
+        messages.error(request, "Comment not found.")
+    
+    return redirect('home')
+
+
+# Delete comment
+def delete_comment(request, comment_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to delete comments.")
+        return redirect('account_login')
+    
+    try:
+        comment = RecipeComment.objects.get(id=comment_id)
+        
+        # Check if the user owns this comment
+        if comment.user != request.user:
+            messages.error(request, "You can only delete your own comments.")
+            return redirect('home')
+        
+        if request.method == 'POST':
+            comment.delete()
+            messages.success(request, "Your comment has been deleted.")
+        
+    except RecipeComment.DoesNotExist:
+        messages.error(request, "Comment not found.")
+    
+    return redirect('home')
+
+
+# Unshare saved recipe from feed (remove from public feed but keep in library)
+def unshare_saved_recipe(request, recipe_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to unshare recipes.")
+        return redirect('account_login')
+    
+    try:
+        recipe_obj = Recipe.objects.get(recipe_id=str(recipe_id))
+        user_recipe = UserRecipe.objects.get(user=request.user, recipe=recipe_obj)
+        
+        if request.method == 'POST':
+            user_recipe.is_shared = False
+            user_recipe.shared_at = None
+            user_recipe.save()
+            messages.success(request, "Recipe removed from the community feed.")
+        
+    except Recipe.DoesNotExist:
+        messages.error(request, "Recipe not found.")
+    except UserRecipe.DoesNotExist:
+        messages.error(request, "You haven't saved this recipe.")
+    
+    return redirect('home')

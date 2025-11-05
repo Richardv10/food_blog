@@ -11,4 +11,7 @@ urlpatterns = [
     path('my-recipes/', views.my_recipes, name='my_recipes'),
     path('recipe/<int:recipe_id>/comment/', views.make_comment, name='make_comment'),
     path('recipe/<str:recipe_id>/feed-comment/', views.make_feed_comment, name='make_feed_comment'),
+    path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
+    path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
+    path('recipe/<int:recipe_id>/unshare/', views.unshare_saved_recipe, name='unshare_saved_recipe'),
 ]

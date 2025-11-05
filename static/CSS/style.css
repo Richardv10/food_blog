@@ -796,6 +796,17 @@ a {
     font-family: var(--font-family);  /* Inter for comment text */
 }
 
+.comment-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+}
+
+.comment-actions .btn {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
 /* ============================================
    AUTHENTICATION PAGES
    ============================================ */
