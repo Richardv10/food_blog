@@ -1031,6 +1031,10 @@ a {
         width: 100%;
         border-radius: var(--border-radius) !important;
         margin-bottom: var(--spacing-xs);
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        min-height: auto;
     }
     
     /* Home page specific */
@@ -1301,9 +1305,9 @@ a {
 
 /* Better button spacing in cards */
 .card-body .btn {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
 }
 
 /* Responsive grid improvements */

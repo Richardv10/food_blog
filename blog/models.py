@@ -3,6 +3,9 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from cloudinary.models import CloudinaryField
 
+
+# Model to store user-created recipes
+
 class CreatedRecipe(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_created_recipes")
     title = models.CharField(max_length=255)
