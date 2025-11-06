@@ -77,12 +77,20 @@ def edit_created_recipe(request, recipe_id):
         return redirect('my_recipes')
     
     if request.method == 'POST':
+        # Update required fields
         recipe.title = request.POST.get('title')
         recipe.description = request.POST.get('description')
         recipe.ingredients = request.POST.get('ingredients')
         recipe.instructions = request.POST.get('instructions')
-        recipe.servings = int(request.POST.get('servings')) if request.POST.get('servings') else None
-        recipe.ready_in_minutes = int(request.POST.get('ready_in_minutes')) if request.POST.get('ready_in_minutes') else None
+        
+        # Update optional fields only if provided
+        servings = request.POST.get('servings')
+        if servings:
+            recipe.servings = int(servings)
+        
+        ready_in_minutes = request.POST.get('ready_in_minutes')
+        if ready_in_minutes:
+            recipe.ready_in_minutes = int(ready_in_minutes)
         
         # Handle image upload
         if request.FILES.get('featured_image'):

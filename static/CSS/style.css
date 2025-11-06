@@ -99,6 +99,7 @@ h1 {
     font-size: var(--font-size-4xl); 
     font-weight: 300;
     margin-bottom: var(--spacing-lg);
+    color: black;
 }
 h2 { 
     font-size: var(--font-size-3xl); 
@@ -157,7 +158,7 @@ a {
 }
 
 .content-wrapper {
-    background: rgba(137, 154, 136, 0.5);
+    background:	rgb(154, 181, 142, 0.7);
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-2xl);
     margin-bottom: var(--spacing-xl);
@@ -510,7 +511,7 @@ a {
    ============================================ */
 
 #recipe-container {
-    background-color: rgba(255, 255, 255, 0.6) !important;
+    background-color: rgba(255, 255, 255, 0.8) !important;
     padding: var(--spacing-xl);
     border-radius: var(--border-radius-lg);
     margin-bottom: var(--spacing-xl);
@@ -542,7 +543,7 @@ a {
 }
 
 #comments-detail {
-    background-color: rgba(255, 255, 255, 0.95) !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
     padding: var(--spacing-xl);
     border-radius: var(--border-radius-lg);
     margin-top: var(--spacing-xl);

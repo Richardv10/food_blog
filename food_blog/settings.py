@@ -29,7 +29,7 @@ DEBUG = False
 
 # Development toggle - set to False to disable API calls during development
 # This prevents constant API calls when refreshing the page.
-ENABLE_FEATURED_RECIPES = True 
+ENABLE_FEATURED_RECIPES = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
 
@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'django_summernote',
     'cloudinary',
     'blog',
     'recipe',
