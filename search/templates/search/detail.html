@@ -7,7 +7,7 @@
 
     {% if user.is_authenticated %}
         {% if is_saved %}
-            <button class="btn btn-success" disabled>✓ Already in Favorites</button>
+            <button type="button" class="btn btn-success" disabled>✓ Already in Favorites</button>
         {% else %}
             <form method="post" action="{% url 'save_recipe' recipe.id %}" style="display: inline;">
                 {% csrf_token %}
@@ -51,8 +51,8 @@
                                   placeholder="Share your thoughts about this recipe..."></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="rating" class="form-label">Rating (optional):</label>
-                        <select name="rating" id="rating" class="form-select">
+                        <label for="share-rating" class="form-label">Rating (optional):</label>
+                        <select name="rating" id="share-rating" class="form-select">
                             <option value="">No rating</option>
                             <option value="5">⭐⭐⭐⭐⭐ (5 stars)</option>
                             <option value="4">⭐⭐⭐⭐ (4 stars)</option>

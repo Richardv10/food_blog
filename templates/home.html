@@ -383,7 +383,7 @@
                                 {% endif %}
                                 
                                 {% if user_recipe.message %}
-                                <div class="alert alert-info" id="user-comment-box">{{ user_recipe.message }} </div>
+                                <div class="alert alert-info user-comment-box" id="user-comment-box-{{ user_recipe.recipe.recipe_id }}">{{ user_recipe.message }} </div>
                                 {% endif %}
                                 
                                 <!-- Recipe meta info (common for both types) -->

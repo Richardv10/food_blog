@@ -554,7 +554,7 @@ a {
     margin-right: auto;
 }
 
-#user-comment-box {
+.user-comment-box {
     background-color: lightgrey;
     color: var(--info-color);
     padding: var(--spacing-sm);
