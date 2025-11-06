@@ -35,10 +35,6 @@ def export_database():
     for app_config in apps.get_app_configs():
         app_label = app_config.label
         
-        # Skip Django's built-in apps if you want
-        # if app_label in ['admin', 'auth', 'contenttypes', 'sessions']:
-        #     continue
-        
         app_data = {}
         
         # Get all models in this app
