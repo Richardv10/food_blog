@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 import requests 
 from .models import Recipe, UserRecipe, RecipeComment
@@ -129,6 +130,7 @@ def home_view(request):
 
 
 # Share recipe to Feed
+@login_required
 def share_recipe(request, recipe_id):
     if request.method == 'POST':
         message = request.POST.get('message', '')
@@ -163,8 +165,8 @@ def share_recipe(request, recipe_id):
         
         return redirect('home')
     
-    # GET request - show share form
-    return render(request, 'recipe/share_recipe.html', {'recipe_id': recipe_id})
+    # GET request - redirect to recipe detail (sharing is done via modal)
+    return redirect('recipe_detail', recipe_id=recipe_id)
     
 
 
@@ -230,6 +232,7 @@ def random_recipe(request):
 
 
 # Save Recipe to User's Favorites
+@login_required
 def save_recipe(request, recipe_id):
     
     # Use helper to fetch and cache recipe data
@@ -250,7 +253,7 @@ def save_recipe(request, recipe_id):
 
 
 # Display User Recipes
-
+@login_required
 def my_recipes(request):
     
     # Get saved recipes, excluding user's own created recipes that were shared
@@ -267,12 +270,16 @@ def my_recipes(request):
 
 
 # Delete Recipe from User's Favorites
-
+@login_required
 def delete_recipe(request, recipe_id):
+    try:
         user_recipe = UserRecipe.objects.get(user=request.user, recipe__recipe_id=str(recipe_id))
         user_recipe.delete()
         messages.success(request, "Recipe deleted from your favorites.")
-        return redirect('my_recipes')
+    except UserRecipe.DoesNotExist:
+        messages.error(request, "Recipe not found in your favorites.")
+    
+    return redirect('my_recipes')
 
 
 # Make Comment on Recipe
@@ -373,20 +380,16 @@ def delete_comment(request, comment_id):
 
 
 # Unshare saved recipe from feed (remove from public feed but keep in library)
+@login_required
 def unshare_saved_recipe(request, recipe_id):
-    if not request.user.is_authenticated:
-        messages.error(request, "You must be logged in to unshare recipes.")
-        return redirect('account_login')
-    
     try:
         recipe_obj = Recipe.objects.get(recipe_id=str(recipe_id))
         user_recipe = UserRecipe.objects.get(user=request.user, recipe=recipe_obj)
         
-        if request.method == 'POST':
-            user_recipe.is_shared = False
-            user_recipe.shared_at = None
-            user_recipe.save()
-            messages.success(request, "Recipe removed from the community feed.")
+        user_recipe.is_shared = False
+        user_recipe.shared_at = None
+        user_recipe.save()
+        messages.success(request, "Recipe removed from the community feed.")
         
     except Recipe.DoesNotExist:
         messages.error(request, "Recipe not found.")
