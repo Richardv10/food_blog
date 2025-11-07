@@ -1,19 +1,24 @@
 # Recipe Room
 
+<img src="static/images/README/hero.png" alt="Three weeks of my life" width="600">
+
+
+
+
 ## Description 
 
-A food blogging site with CRUD functionality, API integration, and cloud storage features.
+A food blogging site where users can create, search and share recpies. 
 
 ## Features
 
 1. Secure user accounts with individual CRUD functionality.
 2. Spoonacular API intergration for searching recipes, including a random search tool, and options to refine/exclude.
-3. Logged in users have a persistant saved "my recipes" section, with recipe caching to reduce API calls.
+3. Logged in users have a persistant saved "my recipes" section, (with recipe caching to reduce API calls).
 4. Users can create and share recipes, (users images are stored seperately with Cloudinary).
 5. Featured Recipes section that changes on every visit.
 6. Responsive mobile first design.
 
-# Development
+# Agile Development
 
 ## User stories and Acceptance criteria 
 
@@ -44,86 +49,184 @@ A food blogging site with CRUD functionality, API integration, and cloud storage
 -Full site functionality preserved through use of media queries and bootstrap
 
 (Feature 2)
-## As a vegetarian user, I want to filter out meat-based recipes, so that I only see dishes I can eat. (Could have)
+### As a vegetarian user, I want to filter out meat-based recipes, so that I only see dishes I can eat. (Could have)
 -Filter options include dietary tags (e.g., vegetarian, vegan, gluten-free).
 ~~Recipes with excluded ingredients are hidden from personalized feed~~
 -Settings persist across sessions.
 
-# Core functionality
+## Github projects board
+<img src="<img src="static/images/README/hero.png" alt="Github user stories" width="600">
+GitHub projects was used for scoping and planning. Using MoSCoW labels for feature prioritization.
+As the sections took time to develop, I reviewed these weekly and ajusted when nessicary.   
 
-The Recipe Room is a food blogging site linked to the spoonacular API for intergrated search/share functionality. Users can create an account, search for recipes or create their own. Both are stored in a users library. When viewed recipes are cached in the database for "local" retrieval. Users can comment on recipes, delete, and update their own comments. As these are stored locally the comments link to recipes in the database via a foreign key, and are visible to all users.
 
 
-# Technologies and packages used
 
-## Django 4.2 (Python Web Framework)
 
-### Core Django Packages
-- **Django 4.2.25** - Main web framework for building the application
-- **asgiref 3.10.0** - ASGI (Asynchronous Server Gateway Interface) reference implementation
-- **sqlparse 0.5.3** - SQL parsing library for Django's database layer
-- **tzdata 2025.2** - Timezone database for handling time zones
 
-### Database
-- **psycopg2 2.9.11** - PostgreSQL database adapter for Python
-- **dj-database-url 3.0.1** - Utility for parsing database URLs (used with environment variables)
 
-### Authentication & Authorization
-- **django-allauth 0.57.2** - Comprehensive authentication app (login, registration, social auth)
-- **PyJWT 2.10.1** - JSON Web Token implementation for secure authentication
-- **oauthlib 3.3.1** - OAuth request-signing logic for social authentication
-- **requests-oauthlib 2.0.0** - OAuth library for making authenticated API requests
-- **python3-openid 3.2.0** - OpenID support for authentication
-- **cryptography 46.0.3** - Cryptographic operations for secure password hashing
-- **defusedxml 0.7.1** - Protection against XML vulnerabilities
+## Core functionality
 
-### Cloud Storage & Media
-- **cloudinary 1.36.0** - Cloud-based image and video management service
-- **dj3-cloudinary-storage 0.0.6** - Django integration for Cloudinary storage
+The Recipe Room is a food blogging site linked to the spoonacular API for intergrated search/share functionality. Users can create an account, search for recipes or create their own. Both are stored in a users library. When viewed recipes are cached in the database for "local" retrieval. Users can comment on recipes, delete, and update their own comments. As these are stored locally the comments link to recipes in the database via a foreign key, and are visible to all users. 
 
-### Static Files
-- **whitenoise 6.11.0** - Serves static files efficiently in production
+## Spoonacular API Intergration
 
-### Security & Validation
-- **bleach 6.2.0** - HTML sanitization library to prevent XSS attacks
-- **certifi 2025.10.5** - SSL certificate validation
-- **cffi 2.0.0** - Foreign Function Interface for calling C code from Python
-- **pycparser 2.23** - C parser for CFFI
+The concept of the site is to provide a resource to search curated recipes, share and comment. For this purpose I utilized an API that has over 50,000 recipes. The API allows for several different endpoints, allowing me to utlize the various functions through spoonaculars "recipe_id", "recipe_detail", and "random" URL's to furfil different functions of the site.
 
-### HTTP & API Integration
-- **requests 2.32.5** - HTTP library for making API calls (Spoonacular API)
-- **urllib3 1.26.20** - HTTP client for Python
-- **charset-normalizer 3.4.4** - Character encoding detection
-- **idna 3.11** - Internationalized Domain Names support
+## Cloudinary API Intergration
 
-### Production Server
-- **gunicorn 23.0.0** - Python WSGI HTTP Server for production deployment
+Due to the use of eco dynos on Heroku, the need for persistant data storage requires the use of a cloud image host, I utilized cloudinary for this purpose. As recipes obtained from the API contain an image URL, this can be saved in the database when a recipe is viewed, then reused. Avoiding the need to store API recipe images locally. But for users recipes, they can upload an image which is stored as a cloudinary field in the database.
 
-### Utilities
-- **packaging 25.0** - Core utilities for Python packages
-- **six 1.17.0** - Python 2 and 3 compatibility utilities
-- **webencodings 0.5.1** - Character encoding handling
+# UX Design
 
-## Frontend Technologies
-- **HTML/CSS** - Front end visual design and layout
-- **JavaScript** - Interactive features and dynamic content
-- **Bootstrap 5** - Responsive design framework for mobile-first development
+As the project scope is to deliver a shared community resource, I chose the format of social feed with infinite scroll. The landing zone of the site changes for returning users, replacing the Welcome banner with the users recipe library. This was to provide users with an easy to navigate exprerience. As the site may be used by users actively cooking, I wanted the functions to be as accessible as possible with as few clicks or touches as is neccissary. To this end I seperated the search function in another app, and paginated to create a distinction between the recipe creation and discovery area of the site, and the social feed and library that may be used for reference. Navigation is achieved via simple links on the navbar, and jump buttons nested in content. 
+
+# Color Scheme and design language
+
+After conducting research on various food blogs the design consensus seems to be light and airy with lots of pastels, I opted for a green theme, but included translucent elements to frame recipes for readability. I chose a simple image background that wouldn't interfiere with the displayed content and gives a clean look.
+
+## Primary Colors
+
+| Color Name | Hex Code | RGB | Preview | Usage |
+|------------|----------|-----|---------|-------|
+| **Primary Color** | `#7bb560` | `rgb(123, 181, 96)` | <div style="background-color: #7bb560; width: 60px; height: 25px; border: 1px solid #ccc; border-radius: 4px;"></div> | Main brand color, buttons, links |
+| **Secondary Color** | `#9fc93b` | `rgb(159, 201, 59)` | <div style="background-color: #9fc93b; width: 60px; height: 25px; border: 1px solid #ccc; border-radius: 4px;"></div> | Secondary buttons, accents |
+| **Accent Color** | `#f2e8cf` | `rgb(242, 232, 207)` | <div style="background-color: #f2e8cf; width: 60px; height: 25px; border: 1px solid #ccc; border-radius: 4px;"></div> | Highlights, decorative elements |
+| **Success Color** | `#479124` | `rgb(71, 145, 36)` | <div style="background-color: #479124; width: 60px; height: 25px; border: 1px solid #ccc; border-radius: 4px;"></div> | Success messages, positive actions |
+| **Danger Color** | `#e76f51` | `rgb(231, 111, 81)` | <div style="background-color: #e76f51; width: 60px; height: 25px; border: 1px solid #ccc; border-radius: 4px;"></div> | Error messages, delete buttons |
+| **Warning Color** | `#9ab58e` | `rgb(154, 181, 142)` | <div style="background-color: #9ab58e; width: 60px; height: 25px; border: 1px solid #ccc; border-radius: 4px;"></div> | Navigation bar, footer background |
+| **Info Color** | `#264653` | `rgb(38, 70, 83)` | <div style="background-color: #264653; width: 60px; height: 25px; border: 1px solid #ccc; border-radius: 4px;"></div> | Headings, informational text |
+| **Card Background** | `#fef9f0` | `rgb(254, 249, 240)` | <div style="background-color: #fef9f0; width: 60px; height: 25px; border: 1px solid #ccc; border-radius: 4px;"></div> | Recipe cards, content blocks |
+
+
+
+
+# Wireframes
+
+## Wireframe 1 - Home Page / Landing
+<img src="static/images/README/1.png" alt="Wireframe 1 - Home Page" width="600">
+
+*Initial homepage design showing the main landing zone and navigation structure*
+
+## Wireframe 2 - Logged In User
+<img src="static/images/README/2.png" alt="Wireframe 2 - Logged in" width="600">
+
+*Logged in landing page*
+
+## Wireframe 3 - Recipe Search
+<img src="static/images/README/3.png" alt="Wireframe 3 - Recipe Search" width="600">
+
+*Recipe Search Function*
+
+## Wireframe 4 - Recipe detail
+<img src="static/images/README/4.png" alt="Wireframe 4 - User Dashboard" width="600">
+
+*User's recipe (unified display)*
+
+## Wireframe 5 - Recipe Creation Form
+<img src="static/images/README/5.png" alt="Wireframe 5 - Create Recipe" width="600">
+
+*Form interface for users to create and submit their own recipes*
+
+## Wireframe 6 - Mobile Design
+<img src="static/images/README/6.png" alt="Wireframe 6 - Community Feed" width="400" height="700">
+
+*As the site is "feed based" mobile friendly design requires minimal rearrangement*
+
+# Database ERD
+
+<img src="static/images/README/ERD.png" alt="ERD" width="1000">
+
+## Relationships
+
+### User (Django Auth)
+- **One-to-Many** with UserRecipe: A user can save multiple API recipes
+- **One-to-Many** with CreatedRecipe: A user can create multiple recipes
+- **One-to-Many** with RecipeComment: A user can write multiple comments
+
+### Recipe (API Cache)
+- **One-to-Many** with UserRecipe: A recipe can be saved by multiple users
+- **One-to-Many** with RecipeComment: A recipe can have multiple comments
+- **Unique Constraint**: `recipe_id` (Spoonacular API identifier)
+
+### UserRecipe (Junction Table)
+- **Many-to-One** with User: Links to the user who saved the recipe
+- **Many-to-One** with Recipe: Links to the saved recipe
+- **Unique Together**: (user, recipe) - Prevents duplicate saves
+- **Cascade Delete**: Deletes when User or Recipe is deleted
+
+### CreatedRecipe (User-Created)
+- **Many-to-One** with User (creator): Links to the recipe author
+- **Cascade Delete**: Deletes when creator User is deleted
+- **Independent**: Not related to API Recipe model
+
+### RecipeComment
+- **Many-to-One** with User: Links to comment author
+- **Many-to-One** with Recipe: Links to the commented recipe
+- **Cascade Delete**: Deletes when User or Recipe is deleted
+
+## Key Features
+
+- **Rating System**: UserRecipe and RecipeComment support 0-5 star ratings
+- **Sharing Mechanism**: Both UserRecipe and CreatedRecipe can be shared to community feed
+- **API Caching**: Recipe model caches Spoonacular API data to reduce API calls
+- **Image Storage**: CreatedRecipe uses Cloudinary for user-uploaded images
+- **Validation**: MinValueValidator and MaxValueValidator for ratings, servings, and time
+
+
+
+
+# Technologies and Packages Used
+
+## Backend
+- **Django 4.2.25** - Python web framework
+- **PostgreSQL** (psycopg2 2.9.11) - Database
+- **Gunicorn 23.0.0** - Production WSGI server
+
+## Authentication & Security
+- **Django Allauth 0.57.2** - User authentication and account management
+- **Bleach 6.2.0** - HTML sanitization for XSS protection
+
+## Cloud Services & APIs
+- **Cloudinary 1.36.0** - Image storage and management
+- **Spoonacular API** (via requests 2.32.5) - Recipe data integration
+
+## Static Files & Deployment
+- **WhiteNoise 6.11.0** - Static file serving
+- **dj-database-url 3.0.1** - Database configuration
+
+## Frontend
+- **HTML/CSS** - Structure and styling
+- **JavaScript** - Interactive features
+- **Bootstrap 5** - Responsive design framework
 
 # Screenshots
 
 ## Landing Page
-<img src="static/images/README/landingzone.png" alt="Landing Zone" width="600">
-
-*The welcoming home page featuring the Recipe Room branding and navigation*
 
 <img src="static/images/README/welcome.png" alt="Welcome Section" width="600">
+*Landing page for Recipe Room* Rather than clutter the space with food pictures, Simple headings and a paragraph of text describes the sites features, with two buttons one to promp users to join, and the next leads to the search function that is available to all users of the site 
 
-*Introduction to Recipe Room with key features highlighted*
+<img src="static/images/README/landingzone.png" alt="Landing Zone" width="600">
+
+*Logged in user landing page* When a user is logged in, the generic welcome screen is replaced with a personalized greeting and a tabbed menu showing all the users saved recipes. These have buttons and indicators for sharing and updating those shared recipes 
 
 ## User Authentication
+<img src="static/images/README/notloggedin.png" alt="Not Logged In View" width="600">
+
+*Default view for visitors who are not logged in*
+
 <img src="static/images/README/login.png" alt="Login Page" width="600">
 
 *Secure login interface for registered users*
+
+<img src="static/images/README/signup.png" alt="Sign Up Page" width="600">
+
+*Registration page for new users to create an account*
+
+<img src="static/images/README/loggedin.png" alt="Logged In View" width="600">
+
+*Authenticated user view with full access to features*
 
 ## User Dashboard
 <img src="static/images/README/userlandingzone.png" alt="User Landing Zone" width="600">
@@ -133,7 +236,7 @@ The Recipe Room is a food blogging site linked to the spoonacular API for interg
 ## Recipe Search
 <img src="static/images/README/search.png" alt="Search Functionality" width="600">
 
-*Advanced search interface with filters and dietary preferences*
+*Advanced search interface with suggestions and dietary preferences*
 
 ## Recipe Display
 <img src="static/images/README/APIrecipe.png" alt="API Recipe" width="600">
@@ -173,9 +276,7 @@ The Recipe Room is a food blogging site linked to the spoonacular API for interg
 
 
 
-# Testing, perfomance and validation
-
-After manually testing the site UX. I constructed Unit tests for CRUD functionality using co-pilot.
+# Testing, Performance and Validation
 
 ## Test Summary
 
@@ -184,394 +285,95 @@ After manually testing the site UX. I constructed Unit tests for CRUD functional
 **Passed**: 85 ✅  
 **Failed**: 0 ❌  
 **Success Rate**: 100%  
-**Execution Time**: ~160 seconds (estimated)
+**Execution Time**: ~160 seconds
 
 ---
 
 ## Test Coverage Overview
 
-The test suite covers comprehensive CRUD (Create, Read, Update, Delete) functionality for the Recipe Blog application, testing **all four models**: API Recipe caching, User-Recipe relationships (save/share), User-Created Recipes, and the Commenting system.
+Comprehensive CRUD (Create, Read, Update, Delete) testing across all four models: API Recipe caching, User-Recipe relationships (save/share), User-Created Recipes, and Comments. Tests schema saved in "tests.py"
 
-### Test Categories
+### Blog App Tests (52 tests)
+- **Model Tests** (11 tests) - CreatedRecipe and RecipeComment models ✅
+- **Create Views** (12 tests) - Recipe and comment creation ✅
+- **Read Views** (5 tests) - Recipe viewing permissions ✅
+- **Update Views** (10 tests) - Recipe and comment editing ✅
+- **Delete Views** (9 tests) - Recipe and comment deletion ✅
+- **Share/Unshare** (3 tests) - Community feed functionality ✅
+- **Integration Tests** (4 tests) - Complete CRUD workflows ✅
 
-#### Blog App Tests (52 tests)
-1. **Created Recipe Model Tests** (5 tests) - ✅ All Passed
-2. **Recipe Comment Model Tests** (6 tests) - ✅ All Passed
-3. **Create Recipe View Tests** (4 tests) - ✅ All Passed
-4. **Create Comment View Tests** (8 tests) - ✅ All Passed
-5. **Read Recipe View Tests** (5 tests) - ✅ All Passed
-6. **Update Recipe View Tests** (5 tests) - ✅ All Passed
-7. **Update Comment View Tests** (5 tests) - ✅ All Passed
-8. **Delete Recipe View Tests** (4 tests) - ✅ All Passed
-9. **Delete Comment View Tests** (5 tests) - ✅ All Passed
-10. **Share/Unshare Created Recipe Tests** (3 tests) - ✅ All Passed
-11. **Created Recipe Integration Tests** (2 tests) - ✅ All Passed
-12. **Comment Integration Tests** (2 tests) - ✅ All Passed
-
-#### Recipe App Tests (33 tests)
-13. **API Recipe Model Tests** (7 tests) - ✅ All Passed
-14. **User Recipe Model Tests** (10 tests) - ✅ All Passed
-15. **Save Recipe View Tests** (3 tests) - ✅ All Passed
-16. **Delete Saved Recipe View Tests** (3 tests) - ✅ All Passed
-17. **Share Saved Recipe View Tests** (4 tests) - ✅ All Passed
-18. **Unshare Saved Recipe View Tests** (2 tests) - ✅ All Passed
-19. **My Recipes View Tests** (2 tests) - ✅ All Passed
-20. **Recipe/UserRecipe Integration Tests** (2 tests) - ✅ All Passed
-
----
-
-## Detailed Test Results
-
----
-
-## Blog App Tests (52 tests)
-
-### ✅ Created Recipe Model Tests (CreatedRecipeModelTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_recipe_creation` | Test that a user-created recipe is created correctly | ✅ PASS |
-| `test_recipe_str_method` | Test the string representation of the recipe | ✅ PASS |
-| `test_get_ingredients_list` | Test that ingredients are correctly parsed into a list | ✅ PASS |
-| `test_get_instructions_list` | Test that instructions are correctly parsed into a list | ✅ PASS |
-| `test_recipe_ordering` | Test that recipes are ordered by created_at descending | ✅ PASS |
-
-**Coverage**: Tests the `CreatedRecipe` model's fields, methods, and ordering.
-
----
-
-## Recipe App Tests (37 tests)
-
-### ✅ API Recipe Model Tests (RecipeModelTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_recipe_creation` | Test that an API recipe is cached correctly with all fields | ✅ PASS |
-| `test_recipe_str_method` | Test the string representation of cached recipes | ✅ PASS |
-| `test_recipe_str_without_title` | Test string representation when title is empty | ✅ PASS |
-| `test_recipe_unique_recipe_id` | Test that recipe_id must be unique | ✅ PASS |
-| `test_recipe_ingredients_json_field` | Test that ingredients are stored and retrieved as JSON | ✅ PASS |
-| `test_recipe_optional_fields` | Test creating recipe with only required fields | ✅ PASS |
-| `test_recipe_cached_at_auto_update` | Test that cached_at timestamp updates automatically | ✅ PASS |
-
-**Coverage**: Tests the `Recipe` model for API data caching, including JSON fields, unique constraints, and auto-updating timestamps.
-
----
-
-### ✅ User Recipe Model Tests (UserRecipeModelTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_user_recipe_creation` | Test that user-recipe relationships are created correctly | ✅ PASS |
-| `test_user_recipe_str_method` | Test string representation for saved recipes | ✅ PASS |
-| `test_user_recipe_str_when_shared` | Test string representation for shared recipes | ✅ PASS |
-| `test_user_recipe_unique_constraint` | Test that user-recipe combination must be unique | ✅ PASS |
-| `test_user_recipe_rating_validation` | Test that rating must be between 0 and 5 | ✅ PASS |
-| `test_user_recipe_ordering` | Test that user recipes are ordered by created_at descending | ✅ PASS |
-| `test_user_recipe_cascade_delete_with_user` | Test cascade deletion when user is deleted | ✅ PASS |
-| `test_user_recipe_cascade_delete_with_recipe` | Test cascade deletion when recipe is deleted | ✅ PASS |
-| `test_user_recipe_optional_fields` | Test creating user recipe without optional fields | ✅ PASS |
-| `test_user_recipe_shared_at_timestamp` | Test that shared_at is set when sharing | ✅ PASS |
-
-**Coverage**: Tests the `UserRecipe` model's relationships, constraints (unique_together), validators (rating 0-5), cascade deletions, and timestamps.
-
----
-
-### ✅ Save Recipe View Tests (SaveRecipeViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_save_recipe_authenticated` | Test saving an API recipe while authenticated | ✅ PASS |
-| `test_save_recipe_already_saved` | Test that duplicate saves are prevented | ✅ PASS |
-| `test_save_recipe_unauthenticated` | Test that unauthenticated users cannot save recipes | ✅ PASS |
-
-**Coverage**: Tests saving API recipes to user library, authentication requirements, and duplicate prevention.
-
----
-
-### ✅ Delete Saved Recipe View Tests (DeleteSavedRecipeViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_delete_recipe_authenticated_owner` | Test that users can delete their saved recipes | ✅ PASS |
-| `test_delete_recipe_non_owner` | Test that users cannot delete other users' saved recipes | ✅ PASS |
-| `test_delete_recipe_unauthenticated` | Test that unauthenticated users cannot delete recipes | ✅ PASS |
-
-**Coverage**: Tests deletion of saved recipes, ownership validation, and authentication.
-
----
-
-### ✅ Share Saved Recipe View Tests (ShareSavedRecipeViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_share_recipe_new` | Test sharing a recipe that isn't saved yet | ✅ PASS |
-| `test_share_recipe_already_saved` | Test sharing a recipe that's already saved | ✅ PASS |
-| `test_share_recipe_get_request` | Test GET request shows share form | ✅ PASS |
-| `test_share_recipe_unauthenticated` | Test that unauthenticated users cannot share | ✅ PASS |
-
-**Coverage**: Tests sharing API recipes to community feed with messages and ratings.
-
----
-
-### ✅ Unshare Saved Recipe View Tests (UnshareSavedRecipeViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_unshare_recipe_authenticated_owner` | Test that users can unshare their recipes | ✅ PASS |
-| `test_unshare_recipe_unauthenticated` | Test that unauthenticated users cannot unshare | ✅ PASS |
-
-**Coverage**: Tests removing recipes from community feed while keeping them in library.
-
----
-
-### ✅ My Recipes View Tests (MyRecipesViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_my_recipes_authenticated` | Test viewing my recipes page while authenticated | ✅ PASS |
-| `test_my_recipes_unauthenticated` | Test that unauthenticated users are redirected | ✅ PASS |
-
-**Coverage**: Tests the user's recipe library view showing both saved and created recipes.
-
----
-
-### ✅ Recipe/UserRecipe Integration Tests (RecipeUserRecipeIntegrationTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_complete_save_share_unshare_delete_workflow` | Test complete Save → Share → Unshare → Delete workflow | ✅ PASS |
-| `test_multiple_users_saving_same_recipe` | Test multiple users saving and sharing the same API recipe | ✅ PASS |
-
-**Coverage**: Tests complete user workflows with API recipes and multi-user interactions.
+### Recipe App Tests (33 tests)
+- **Model Tests** (17 tests) - Recipe and UserRecipe models ✅
+- **Save/Delete Views** (6 tests) - Library management ✅
+- **Share/Unshare Views** (6 tests) - Feed management ✅
+- **My Recipes View** (2 tests) - Dashboard functionality ✅
+- **Integration Tests** (2 tests) - Complete workflows ✅
 
 ---
 
 ## Key Features Tested
 
 ### ✅ API Recipe Features (Recipe Model)
-- ✅ Recipe caching from Spoonacular API
-- ✅ JSON field storage for ingredients
-- ✅ Unique recipe ID enforcement
-- ✅ Auto-updating timestamps
-- ✅ Optional field handling
-- ✅ String representations
+- Recipe caching from Spoonacular API
+- JSON field storage for ingredients
+- Unique recipe ID enforcement
+- Auto-updating timestamps
 
-### ✅ User Recipe Library Features (UserRecipe Model)
-- ✅ Saving API recipes to library
-- ✅ Deleting saved recipes
-- ✅ Sharing recipes to community feed
-- ✅ Unsharing recipes from feed
-- ✅ Rating recipes (0-5 validation)
-- ✅ Adding messages to shared recipes
-- ✅ Unique constraint (one save per user-recipe pair)
-- ✅ Cascade deletions
-- ✅ Timestamp management
-- ✅ Authentication and permissions
-- ✅ Complete save/share/unshare/delete workflows
-- ✅ Multi-user interactions
+### ✅ User Recipe Library (UserRecipe Model)
+- Saving/deleting API recipes
+- Sharing/unsharing to community feed
+- Rating recipes (0-5 validation)
+- Adding messages to shared recipes
+- Authentication and permissions
+- Multi-user interactions
 
-### ✅ User-Created Recipe Features (CreatedRecipe Model)
+### ✅ User-Created Recipes (CreatedRecipe Model)
+- Recipe creation with full and minimal data
+- Recipe updates (complete and partial)
+- Recipe deletion
+- Owner permissions enforcement
+- Public vs. private recipe access
+- Sharing to community feed
 
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_comment_creation` | Test that a comment is created correctly with all fields | ✅ PASS |
-| `test_comment_str_method` | Test the string representation of comments | ✅ PASS |
-| `test_comment_without_rating` | Test creating comments without optional rating field | ✅ PASS |
-| `test_comment_ordering` | Test that comments are ordered by created_at descending | ✅ PASS |
-| `test_comment_cascade_delete_with_recipe` | Test that comments are deleted when their recipe is deleted | ✅ PASS |
-| `test_comment_cascade_delete_with_user` | Test that comments are deleted when the user is deleted | ✅ PASS |
-
-**Coverage**: Tests the `RecipeComment` model's fields, relationships, cascade deletions, and ordering.
-
----
-
-### ✅ Create Recipe View Tests (CreateRecipeViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_create_recipe_get_authenticated` | Test GET request to create recipe page while authenticated | ✅ PASS |
-| `test_create_recipe_get_unauthenticated` | Test that unauthenticated users are redirected to login | ✅ PASS |
-| `test_create_recipe_post_valid_data` | Test creating a recipe with valid POST data | ✅ PASS |
-| `test_create_recipe_post_minimal_data` | Test creating a recipe with only required fields | ✅ PASS |
-
-**Coverage**: Tests recipe creation functionality, authentication requirements, and validation.
-
----
-
-### ✅ Create Comment View Tests (CreateCommentViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_make_comment_authenticated` | Test creating a comment while authenticated | ✅ PASS |
-| `test_make_comment_without_rating` | Test creating comments without ratings | ✅ PASS |
-| `test_make_feed_comment_authenticated` | Test creating comments from home feed | ✅ PASS |
-| `test_make_feed_comment_unauthenticated` | Test that unauthenticated users cannot comment | ✅ PASS |
-| `test_make_feed_comment_empty_text` | Test that empty comments are rejected | ✅ PASS |
-| `test_make_feed_comment_nonexistent_recipe` | Test commenting on non-existent recipes | ✅ PASS |
-
-**Coverage**: Tests comment creation from both recipe detail pages and home feed, authentication, and validation.
-
----
-
-### ✅ Read Recipe View Tests (ReadRecipeViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_created_recipe_detail_owner` | Test that recipe owner can view their own recipe | ✅ PASS |
-| `test_created_recipe_detail_non_owner` | Test that non-owners cannot view private recipes | ✅ PASS |
-| `test_public_recipe_detail_authenticated` | Test that authenticated users can view shared recipes | ✅ PASS |
-| `test_public_recipe_detail_unauthenticated` | Test that unauthenticated users can view shared recipes | ✅ PASS |
-| `test_public_recipe_detail_private_recipe` | Test that private recipes cannot be viewed via public URL | ✅ PASS |
-
-**Coverage**: Tests recipe viewing permissions, public/private recipe access, and authentication.
-
----
-
-### ✅ Update Recipe View Tests (UpdateRecipeViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_edit_recipe_get_authenticated_owner` | Test GET request to edit page by recipe owner | ✅ PASS |
-| `test_edit_recipe_get_non_owner` | Test that non-owners cannot access edit page | ✅ PASS |
-| `test_edit_recipe_post_valid_data` | Test updating a recipe with valid data | ✅ PASS |
-| `test_edit_recipe_post_partial_update` | Test updating only some fields | ✅ PASS |
-| `test_edit_recipe_unauthenticated` | Test that unauthenticated users cannot edit | ✅ PASS |
-
-**Coverage**: Tests recipe editing functionality, permissions, and partial updates.
-
-**Note**: The partial update functionality was fixed to properly preserve existing field values when they're not included in the POST request. Optional fields (`servings`, `ready_in_minutes`) now only update if explicitly provided.
-
----
-
-### ✅ Update Comment View Tests (UpdateCommentViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_edit_comment_authenticated_owner` | Test that comment owners can edit their comments | ✅ PASS |
-| `test_edit_comment_non_owner` | Test that non-owners cannot edit other users' comments | ✅ PASS |
-| `test_edit_comment_unauthenticated` | Test that unauthenticated users cannot edit comments | ✅ PASS |
-| `test_edit_comment_empty_text` | Test that comments cannot be updated with empty text | ✅ PASS |
-| `test_edit_nonexistent_comment` | Test editing a comment that doesn't exist | ✅ PASS |
-
-**Coverage**: Tests comment editing functionality, ownership validation, and error handling.
-
-### ✅ Delete View Tests (DeleteRecipeViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_delete_recipe_authenticated_owner` | Test that recipe owner can delete their recipe | ✅ PASS |
-| `test_delete_recipe_non_owner` | Test that non-owners cannot delete recipes | ✅ PASS |
-| `test_delete_recipe_unauthenticated` | Test that unauthenticated users cannot delete | ✅ PASS |
-| `test_delete_nonexistent_recipe` | Test deleting a recipe that doesn't exist | ✅ PASS |
-
-**Coverage**: Tests recipe deletion functionality, permissions, and error handling.
-
----
-
-### ✅ Delete Comment View Tests (DeleteCommentViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_delete_comment_authenticated_owner` | Test that comment owners can delete their comments | ✅ PASS |
-| `test_delete_comment_non_owner` | Test that non-owners cannot delete other users' comments | ✅ PASS |
-| `test_delete_comment_unauthenticated` | Test that unauthenticated users cannot delete comments | ✅ PASS |
-| `test_delete_comment_get_request` | Test that GET requests do not delete comments (POST required) | ✅ PASS |
-| `test_delete_nonexistent_comment` | Test deleting a comment that doesn't exist | ✅ PASS |
-
-**Coverage**: Tests comment deletion functionality, ownership validation, HTTP method validation, and error handling.
-
----
-
-### ✅ Share/Unshare Recipe Tests (ShareRecipeViewTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_share_recipe_authenticated` | Test sharing a recipe to the community feed | ✅ PASS |
-| `test_unshare_recipe_authenticated` | Test unsharing a recipe from the community feed | ✅ PASS |
-| `test_share_recipe_unauthenticated` | Test that unauthenticated users cannot share | ✅ PASS |
-
-**Coverage**: Tests recipe sharing functionality and authentication requirements.
-
----
-
-### ✅ Recipe Integration Tests (RecipeCRUDIntegrationTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_complete_crud_workflow` | Test complete Create → Read → Update → Delete workflow | ✅ PASS |
-| `test_share_unshare_workflow` | Test sharing and unsharing workflow | ✅ PASS |
-
-**Coverage**: Tests complete user workflows from creation to deletion, including sharing.
-
----
-
-### ✅ Comment Integration Tests (CommentIntegrationTest)
-
-| Test Name | Description | Status |
-|-----------|-------------|--------|
-| `test_complete_comment_crud_workflow` | Test complete comment Create → Update → Delete workflow | ✅ PASS |
-| `test_multiple_users_commenting` | Test multiple users commenting and permission boundaries | ✅ PASS |
-
-**Coverage**: Tests complete comment workflows and multi-user interactions with proper permission enforcement.
+### ✅ Comment System (RecipeComment Model)
+- Comment creation and editing
+- Comment deletion
+- Permission enforcement (owners only)
+- Cascade deletion with recipes/users
+- Multi-user interactions
+- Authentication requirements
 
 ---
 
 ## Test Environment
 
 - **Framework**: Django TestCase
-- **Database**: SQLite (test database)
-- **Python Version**: 3.x
-- **Django Version**: 4.x
-- **Test Database**: PostgreSQL test instance (Neon serverless)
-
----
-
-## Key Features Tested
-
-### ✅ User-Created Recipe Features (CreatedRecipe Model)
-- ✅ Recipe creation with full and minimal data
-- ✅ Recipe retrieval and display
-- ✅ Recipe updates with complete data
-- ✅ Recipe partial updates (preserving unchanged fields)
-- ✅ Recipe deletion
-- ✅ Authentication and authorization
-- ✅ Owner permissions (only owners can edit/delete their recipes)
-- ✅ Public vs. private recipe access
-- ✅ Recipe sharing to community feed
-- ✅ Recipe unsharing from community feed
-- ✅ Complete CRUD workflows
-- ✅ Model methods and properties
-- ✅ URL routing and redirects
-
-### ✅ Comment Features (RecipeComment Model)
-- ✅ Comment creation on recipes
-- ✅ Comment creation from home feed
-- ✅ Comments with and without ratings
-- ✅ Comment editing by owner
-- ✅ Comment deletion by owner
-- ✅ Permission enforcement (users can only edit/delete their own comments)
-- ✅ Cascade deletion (comments deleted when recipe or user is deleted)
-- ✅ Empty comment validation
-- ✅ Authentication requirements for commenting
-- ✅ Multi-user comment interactions
-- ✅ Comment ordering (newest first)
+- **Database**: PostgreSQL (Neon serverless test instance)
+- **Python**: 3.x
+- **Django**: 4.x
 
 ---
 
 ## Conclusion
 
-The test suite demonstrates **100% success rate** (85/85 tests passing), indicating that all core CRUD functionality is working correctly for **all four models**: Recipe (API cache), UserRecipe (save/share), CreatedRecipe (user recipes), and RecipeComment.
-
-
-```markdown
-![Tests](https://img.shields.io/badge/tests-85%20passed-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
-![Models](https://img.shields.io/badge/models-4%20tested-blue)
-![Apps](https://img.shields.io/badge/apps-blog%20%7C%20recipe-blue)
-```
+All 85 tests passed successfully, validating complete CRUD functionality across all models with proper authentication, permissions, and error handling.
 
 ---
 
-*Last Updated: November 6, 2025*
+# Ai Tools
 
+## Code Creation
+I utilized claude Sonnet 4.5 to assist in code production through vs code co-pilot. Early in development of the project, frequent API calls made me aware the need for a caching system. I used co-pilot to help me implement a caching system into my exisiting schema, and assising in the creation of large sections of django template code on the sites frontend, which would otherwise have taken much longer.     
+
+## Debugging
+Co-pilot helped specifically thorough logical problem solving, and explaing how to achieve given objectives. I frequently asked co-pilot to identify errors regarding django specific functions, and behaviour I wasn't familiar with. File structure errors, Cloudinary specific paramenters, with such a large framework to learn co-pilot has been invaluable in this respect. 
+
+## Optimization 
+I've used co-pilot to refactor sections of code I thought could be improved, or asked for altrernative way to achieve objectives. Co-pilot was used extensively to ajust bootstrap classes and tweak things in bulk, or reorganize the CSS file as it grew. Early in development I tried out several different ways of implementing models, data retrival methods and schema, co-pilot allowed for rapid prototyping, and resulted in a more refined product through iterative development.
+
+
+# Cloud Deployment
+
+The project is deployed to Heroku and can be found above.
+
+## Set-up Heroku  

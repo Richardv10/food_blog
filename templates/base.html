@@ -68,7 +68,6 @@
                                 {{ user.username }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{% url 'my_recipes' %}">My Recipes</a></li>
                                 <li><a class="dropdown-item" href="{% url 'create_recipe' %}">Create Recipe</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
@@ -103,8 +102,22 @@
         {% block content %}
         {% endblock %}
     </main>
+    
     <footer>
+        <div class="text-center" id="footerid">
+          <span class="social-links-inline">
+                <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="https://pinterest.com" target="_blank" rel="noopener" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
+                    <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                </span>
         
+         
+                <p>Search powered by <a href="https://spoonacular.com/food-api" target="_blank" rel="noopener" class="footer-link-inline">Spoonacular API</a> | Built with <i class="bi bi-heart-fill text-danger"></i> using Django<p>
+            </p>
+            <p>&copy; 2025 Recipe Room. All rights reserved.</p>
+        </div>
     </footer>
     
     <!-- Bootstrap JavaScript Bundle with Popper -->

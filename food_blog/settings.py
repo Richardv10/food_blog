@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 
-# SECURITY WARNING: don't run with debug turned on in production! "Turn it off they say, the only thing I think when they tell me to turn it off, I say NO! NO! NO! NO! NO!"
-DEBUG = False
+# SECURITY WARNING: don't run with debug turned on in production! "Turn it off they say, the only think I think when they tell me to turn it off, I say NO! NO! NO! NO! NO!"
+DEBUG = True
 
 # Development toggle - set to False to disable API calls during development
 # This prevents constant API calls when refreshing the page.
@@ -58,7 +58,6 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Cloudinary Configuration - Force HTTPS
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL'),
     'SECURE': True,  # Force HTTPS for all Cloudinary URLs
