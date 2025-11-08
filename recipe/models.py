@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
 class Recipe(models.Model):
     recipe_id = models.CharField(
         max_length=100,
@@ -75,6 +76,7 @@ class UserRecipe(models.Model):
     def __str__(self):
         status = "shared" if self.is_shared else "saved"
         return f"{self.user.username} {status} {self.recipe}"
+
 
 # User comments on recipes
 class RecipeComment(models.Model):
