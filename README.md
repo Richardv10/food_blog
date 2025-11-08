@@ -359,11 +359,67 @@ Comprehensive CRUD (Create, Read, Update, Delete) testing across all four models
 All 85 tests passed successfully, validating complete CRUD functionality across all models with proper authentication, permissions, and error handling.
 
 ---
+# HTML Validation Testing
+
 
 <table>
   <thead>
     <tr>
       <th>Page</th>
+      <th>Screenshot</th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Home Page</td>
+      <td><img src="static/images/README/validation_images/homepage.png" alt="Home Page Validation" width="400"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Login Page</td>
+      <td><img src="static/images/README/validation_images/loginpage.png" alt="Login Page Validation" width="400"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Logout Page</td>
+      <td><img src="static/images/README/validation_images/logout.png" alt="Logout Page Validation" width="400"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Sign Up Page</td>
+      <td><img src="static/images/README/validation_images/signuppage.png" alt="Sign Up Page Validation" width="400"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Search Page</td>
+      <td><img src="static/images/README/validation_images/searchpage.png" alt="Search Page Validation" width="400"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Recipe Page</td>
+      <td><img src="static/images/README/validation_images/recipepage.png" alt="Recipe Page Validation" width="400"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Created Recipe Page</td>
+      <td><img src="static/images/README/validation_images/createdpage.png" alt="Created Recipe Page Validation" width="400"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Random Recipe</td>
+      <td><img src="static/images/README/validation_images/random.png" alt="Random Recipe Validation" width="400"></td>
+      <td>✅ Pass</td>
+    </tr>
+  </tbody>
+</table>
+
+# Python Validation
+
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
       <th>Screenshot</th>
       <th>Result</th>
     </tr>
@@ -396,11 +452,6 @@ All 85 tests passed successfully, validating complete CRUD functionality across 
     </tr>
   </tbody>
 </table>
-
-
-
-
-
 
 # Ai Tools
 
