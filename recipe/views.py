@@ -1,5 +1,3 @@
-
-# Imports
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.conf import settings
@@ -9,6 +7,7 @@ from django.utils import timezone
 import requests
 from .models import Recipe, UserRecipe, RecipeComment
 from blog.models import CreatedRecipe
+
 
 # Helper function to fetch and cache recipe data
 def get_or_fetch_recipe(recipe_id):

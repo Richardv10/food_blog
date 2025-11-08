@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 # Turn it off they say, the only thing I think when they tell me to
 # turn it off, I say NO! NO! NO! NO! NO!
-DEBUG = False
+DEBUG = True
 
 # Development toggle - set to False to disable API calls
 # This prevents constant API calls when refreshing the page.
@@ -62,7 +62,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL'),
-    'SECURE': True,  # Force HTTPS for all Cloudinary URLs
+    'secure': True,  # Force HTTPS for all Cloudinary URLs
 }
 
 MIDDLEWARE = [

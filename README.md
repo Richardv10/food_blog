@@ -426,29 +426,64 @@ All 85 tests passed successfully, validating complete CRUD functionality across 
   </thead>
   <tbody>
     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>blog/admin.py</td>
+      <td><img src="static/images/README/pylint/blog_admin.png" alt="blog admin validation"></td>
+      <td>✅ Pass</td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>blog/models.py</td>
+      <td><img src="static/images/README/pylint/blog_models.png" alt="blog models validation"></td>
+      <td>✅ Pass</td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>blog/urls.py</td>
+      <td><img src="static/images/README/pylint/blog_urls.png" alt="blog urls validation"></td>
+      <td>✅ Pass</td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>blog/views.py</td>
+      <td><img src="static/images/README/pylint/blog_views.png" alt="blog views validation"></td>
+      <td>✅ Pass</td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>recipe/admin.py</td>
+      <td><img src="static/images/README/pylint/recipe_admin.png" alt="recipe admin validation"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>recipe/models.py</td>
+      <td><img src="static/images/README/pylint/recipe_models.png" alt="recipe models validation"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>recipe/urls.py</td>
+      <td><img src="static/images/README/pylint/recipe_urls.png" alt="recipe urls validation"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>recipe/views.py</td>
+      <td><img src="static/images/README/pylint/recipe_views.png" alt="recipe views validation"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>food_blog/urls.py</td>
+      <td><img src="static/images/README/pylint/foodblog_urls.png" alt="food_blog urls validation"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>food_blog/settings.py</td>
+      <td><img src="static/images/README/pylint/settings.png" alt="settings validation"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>admin.py</td>
+      <td><img src="static/images/README/pylint/admin_py.png" alt="admin.py validation"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>blog/tests.py</td>
+      <td><img src="static/images/README/pylint/test.png" alt="tests validation"></td>
+      <td>✅ Pass</td>
     </tr>
   </tbody>
 </table>

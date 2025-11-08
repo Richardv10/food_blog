@@ -49,17 +49,17 @@
                                             {% endif %}
                                             
                                             <div class="mt-auto">
-                                                <div class="btn-group w-100 mb-2" role="group">
-                                                    <a href="{% url 'recipe_detail' library_entry.recipe.recipe_id %}" class="btn btn-primary">View</a>
+                                                <div class="d-flex flex-column gap-2">
+                                                    <a href="{% url 'recipe_detail' library_entry.recipe.recipe_id %}" class="btn btn-primary">View Recipe</a>
                                                     <button type="button" class="btn btn-info" data-bs-toggle="modal" 
                                                             data-bs-target="#shareModal{{ library_entry.recipe.recipe_id }}">
-                                                        {% if library_entry.is_shared %}Update{% else %}Share{% endif %}
+                                                        {% if library_entry.is_shared %}Update Share{% else %}Share{% endif %}
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" 
+                                                            data-bs-target="#deleteModal{{ library_entry.recipe.recipe_id }}">
+                                                        Remove from Library
                                                     </button>
                                                 </div>
-                                                <button type="button" class="btn btn-outline-danger btn-sm w-100" data-bs-toggle="modal" 
-                                                        data-bs-target="#deleteModal{{ library_entry.recipe.recipe_id }}">
-                                                    Remove from Library
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -126,25 +126,25 @@
                                             {% endif %}
                                             
                                             <div class="mt-auto">
-                                                <div class="btn-group w-100 mb-2" role="group">
+                                                <div class="d-flex flex-column gap-2">
                                                     <a href="{% url 'created_recipe_detail' recipe.id %}" class="btn btn-primary">View</a>
                                                     <a href="{% url 'edit_created_recipe' recipe.id %}" class="btn btn-outline-secondary">Edit</a>
+                                                
+                                                    {% if not recipe.is_shared %}
+                                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" 
+                                                            data-bs-target="#shareModal{{ recipe.id }}">
+                                                        Share to Feed
+                                                    </button>
+                                                    {% else %}
+                                                    <a href="{% url 'unshare_created_recipe' recipe.id %}" class="btn btn-outline-warning btn-sm"
+                                                       onclick="return confirm('Remove this recipe from the community feed?')">
+                                                        Remove from Feed
+                                                    </a>
+                                                    {% endif %}
+                                                    
+                                                    <a href="{% url 'delete_created_recipe' recipe.id %}" class="btn btn-outline-danger btn-sm" 
+                                                       onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</a>
                                                 </div>
-                                                
-                                                {% if not recipe.is_shared %}
-                                                <button type="button" class="btn btn-info btn-sm w-100 mb-2" data-bs-toggle="modal" 
-                                                        data-bs-target="#shareModal{{ recipe.id }}">
-                                                    Share to Feed
-                                                </button>
-                                                {% else %}
-                                                <a href="{% url 'unshare_created_recipe' recipe.id %}" class="btn btn-outline-warning btn-sm w-100 mb-2"
-                                                   onclick="return confirm('Remove this recipe from the community feed?')">
-                                                    Remove from Feed
-                                                </a>
-                                                {% endif %}
-                                                
-                                                <a href="{% url 'delete_created_recipe' recipe.id %}" class="btn btn-outline-danger btn-sm w-100" 
-                                                   onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</a>
                                             </div>
                                         </div>
                                     </div>
