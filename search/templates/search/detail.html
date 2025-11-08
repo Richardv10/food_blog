@@ -2,36 +2,62 @@
 
 {% block content %}
 <div id="recipe-container">
-    <h1>{{ recipe.title }}</h1>
-    <img src="{{ recipe.image }}" alt="{{ recipe.title }}" class="recipe-image">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>{{ recipe.title }}</h1>
+                <div>
+                    <a href="{% url 'search_recipes' %}" class="btn btn-outline-primary">Back to Search</a>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}" class="img-fluid rounded recipe-image">
+                    
+                    <div class="mt-3">
+                        {% if user.is_authenticated %}
+                            {% if is_saved %}
+                                <button type="button" class="btn btn-success w-100 mb-2" disabled>✓ Already in Favorites</button>
+                            {% else %}
+                                <form method="post" action="{% url 'save_recipe' recipe.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary w-100 mb-2">Add to Favorites</button>
+                                </form>
+                            {% endif %}
+                            
+                            <!-- Share Button -->
+                            <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#shareModal">
+                                Share to Feed
+                            </button>
+                        {% else %}
+                            <p class="text-center"><a href="/accounts/login/">Log in</a> to save this recipe to your favorites.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-8">
+                    <div class="mb-4">
+                        <h4>Ingredients</h4>
+                        <div class="ingredients-list">
+                            {% for ingredient in recipe.extendedIngredients %}
+                                <div class="ingredient-item">
+                                    <i class="bi bi-check-circle text-success me-2"></i>{{ ingredient.original }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
 
-    {% if user.is_authenticated %}
-        {% if is_saved %}
-            <button type="button" class="btn btn-success" disabled>✓ Already in Favorites</button>
-        {% else %}
-            <form method="post" action="{% url 'save_recipe' recipe.id %}" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Add to Favorites</button>
-            </form>
-        {% endif %}
-        
-        <!-- Share Button -->
-        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#shareModal">
-            Share to Feed
-        </button>
-    {% else %}
-        <p><a href="/accounts/login/">Log in</a> to save this recipe to your favorites.</p>
-    {% endif %}
-
-    <h2>Ingredients:</h2>
-    <ul>
-    {% for ingredient in recipe.extendedIngredients %}
-    <li>{{ ingredient.original }}</li>
-    {% endfor %}
-    </ul>
-
-    <h2>Instructions:</h2>
-    <p>{{ recipe.instructions|safe }}</p>
+                    <div class="mb-4">
+                        <h4>Instructions</h4>
+                        <div class="instructions-content">
+                            {{ recipe.instructions|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Share Modal -->

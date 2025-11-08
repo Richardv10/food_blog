@@ -158,10 +158,13 @@ a {
 }
 
 .content-wrapper {
-    background:	rgb(154, 181, 142, 0.7);
+    background: rgba(154, 181, 142, 0.7) !important;
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-2xl);
     margin-bottom: var(--spacing-xl);
+}
+#created-detail {
+    background: rgba(154, 181, 142, 0.7) !important;
 }
 
 /* For screens 768px and above, limit the width */
@@ -766,6 +769,24 @@ a {
     flex: 1;
 }
 
+/* Ingredients and Instructions styling */
+.ingredient-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.ingredient-item:last-child {
+    border-bottom: none;
+}
+
+.ingredients-list {
+    line-height: 1.8;
+}
+
+.instructions-content {
+    line-height: 1.8;
+}
+
 /* ============================================
    COMMENTS SECTION
    ============================================ */
@@ -1084,6 +1105,7 @@ a {
     .content-wrapper {
         padding: var(--spacing-md);
         min-width: 100%;
+        background-color:rgb(154, 181, 142, 0.9);
     }
     
     #recipe-container {
@@ -1260,9 +1282,10 @@ a {
 /* Saved recipes grid layout */
 .saved-recipes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 300px));
     gap: var(--spacing-xl);
     margin-top: var(--spacing-lg);
+    justify-content: start;
 }
 
 .saved-recipes-grid .recipe-card {
@@ -1374,6 +1397,13 @@ a {
 }
 
 /* Responsive adjustments for my recipes */
+@media (min-width: 769px) {
+    .saved-recipes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 300px));
+        justify-content: start;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding-left: var(--spacing-md);
@@ -1383,6 +1413,7 @@ a {
     .saved-recipes-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-lg);
+        justify-content: stretch;
     }
     
     .saved-recipes-grid .button-group {

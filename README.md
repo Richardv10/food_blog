@@ -55,7 +55,7 @@ A food blogging site where users can create, search and share recpies.
 -Settings persist across sessions.
 
 ## Github projects board
-<img src="<img src="static/images/README/hero.png" alt="Github user stories" width="600">
+<img src="static/images/README/github.png" alt="Github user stories" width="600">
 GitHub projects was used for scoping and planning. Using MoSCoW labels for feature prioritization.
 As the sections took time to develop, I reviewed these weekly and ajusted when nessicary.   
 
@@ -189,7 +189,7 @@ After conducting research on various food blogs the design consensus seems to be
 
 ## Cloud Services & APIs
 - **Cloudinary 1.36.0** - Image storage and management
-- **Spoonacular API** (via requests 2.32.5) - Recipe data integration
+- **Spoonacular API** - Recipe data integration
 
 ## Static Files & Deployment
 - **WhiteNoise 6.11.0** - Static file serving
@@ -243,7 +243,7 @@ After conducting research on various food blogs the design consensus seems to be
 
 *Recipe detail page showing API-fetched recipe with full information*
 
-<img src="static/images/README/user%20recipe.png" alt="User Created Recipe" width="600">
+<img src="static/images/README/userrecipe.png" alt="User Created Recipe" width="600">
 
 *User-created recipe detail view with custom content*
 
