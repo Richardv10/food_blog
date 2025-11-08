@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import cloudinary
 if os.path.isfile('env.py'):
     import env
 
@@ -66,6 +67,13 @@ CLOUDINARY_STORAGE = {
     'SECURE_DISTRIBUTION': True,  # Use secure CDN distribution
     'SECURE_URL': True,  # Generate secure HTTPS URLs in templates
 }
+
+# Configure Cloudinary to use secure URLs
+cloudinary.config(
+    secure=True,
+    secure_distribution=None,
+    secure_cdn_subdomain=True
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
