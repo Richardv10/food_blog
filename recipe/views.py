@@ -179,20 +179,48 @@ def share_recipe(request, recipe_id):
     
 
 
-# Search Recipe (default display set to 10)
+# Search Recipe (with pagination, 10 results per page)
 def search_recipes(request):
     if request.method == 'POST':
         query = request.POST.get('query')
+        page = request.POST.get('page', 1)
+        
+        # Calculate offset for pagination
+        try:
+            page = int(page)
+        except (ValueError, TypeError):
+            page = 1
+        
+        offset = (page - 1) * 10
+        
         url = "https://api.spoonacular.com/recipes/complexSearch"
         params = {
             'apiKey': settings.SPOONACULAR_API_KEY,
             'query': query,
-            'number': 10
+            'number': 10,
+            'offset': offset
         }
         response = requests.get(url, params=params)
         data = response.json()
         recipes = data.get('results', [])
-        return render(request, 'search/results.html', {'recipes': recipes})
+        total_results = data.get('totalResults', 0)
+        
+        # Calculate pagination info
+        total_pages = (total_results + 9) // 10  # Ceiling division
+        has_previous = page > 1
+        has_next = page < total_pages
+        
+        context = {
+            'recipes': recipes,
+            'query': query,
+            'page': page,
+            'total_results': total_results,
+            'total_pages': total_pages,
+            'has_previous': has_previous,
+            'has_next': has_next,
+        }
+        
+        return render(request, 'search/results.html', context)
     return render(request, 'search/search.html') 
 
 
