@@ -787,6 +787,35 @@ a {
     line-height: 1.8;
 }
 
+.instruction-step {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.step-number {
+    background-color: var(--secondary-color);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+    line-height: 1.6;
+}
+
 /* ============================================
    COMMENTS SECTION
    ============================================ */
@@ -848,6 +877,33 @@ a {
 .comment-actions .btn {
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.comments-list {
+    margin-top: 2rem;
+}
+
+.comment-card {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    background: white;
+}
+
+.comment-card .comment-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.comment-card .comment-header .text-muted {
+    margin-left: auto;
+}
+
+.comment-card .comment-body {
+    margin-top: 0.5rem;
 }
 
 /* Creator's Note / Message styling */

@@ -622,7 +622,7 @@
 <!-- Edit and Delete Comment Modals -->
 {% if recipes_with_comments %}
     {% for item in recipes_with_comments %}
-        {% for comment in item.recent_comments %}
+        {% for comment in item.all_user_comments %}
             {% if user.is_authenticated and user == comment.user %}
             
             <!-- Edit Comment Modal -->

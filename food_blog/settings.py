@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production! "Turn it off they say, the only think I think when they tell me to turn it off, I say NO! NO! NO! NO! NO!"
-DEBUG = True
+DEBUG = False
 
 # Development toggle - set to False to disable API calls during development
 # This prevents constant API calls when refreshing the page.

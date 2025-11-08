@@ -115,10 +115,19 @@ def home_view(request):
             recipe=shared_recipe.recipe
         ).count()
         
+        # Get all comments from the current user for this recipe (for modal generation)
+        user_comments = []
+        if request.user.is_authenticated:
+            user_comments = RecipeComment.objects.filter(
+                recipe=shared_recipe.recipe,
+                user=request.user
+            ).select_related('user')
+        
         recipes_with_comments.append({
             'shared_recipe': shared_recipe,
             'recent_comments': comments,
-            'comment_count': comment_count
+            'comment_count': comment_count,
+            'all_user_comments': user_comments
         })
     
     return render(request, "home.html", {
@@ -332,12 +341,17 @@ def edit_comment(request, comment_id):
         messages.error(request, "You must be logged in to edit comments.")
         return redirect('account_login')
     
+    redirect_url = request.POST.get('redirect_url', 'home')
+    
     try:
         comment = RecipeComment.objects.get(id=comment_id)
         
         # Check if the user owns this comment
         if comment.user != request.user:
             messages.error(request, "You can only edit your own comments.")
+            # Try to redirect to recipe detail if not from home feed
+            if redirect_url != 'home' and comment.recipe:
+                return redirect('recipe_detail', recipe_id=comment.recipe.recipe_id)
             return redirect('home')
         
         if request.method == 'POST':
@@ -351,7 +365,11 @@ def edit_comment(request, comment_id):
         
     except RecipeComment.DoesNotExist:
         messages.error(request, "Comment not found.")
+        return redirect('home')
     
+    # Redirect back to the recipe detail page or home feed
+    if redirect_url == 'recipe_detail' and comment.recipe:
+        return redirect('recipe_detail', recipe_id=comment.recipe.recipe_id)
     return redirect('home')
 
 
@@ -361,12 +379,19 @@ def delete_comment(request, comment_id):
         messages.error(request, "You must be logged in to delete comments.")
         return redirect('account_login')
     
+    redirect_url = request.POST.get('redirect_url', 'home')
+    recipe_id = None
+    
     try:
         comment = RecipeComment.objects.get(id=comment_id)
+        recipe_id = comment.recipe.recipe_id
         
         # Check if the user owns this comment
         if comment.user != request.user:
             messages.error(request, "You can only delete your own comments.")
+            # Try to redirect to recipe detail if not from home feed
+            if redirect_url != 'home' and recipe_id:
+                return redirect('recipe_detail', recipe_id=recipe_id)
             return redirect('home')
         
         if request.method == 'POST':
@@ -375,7 +400,11 @@ def delete_comment(request, comment_id):
         
     except RecipeComment.DoesNotExist:
         messages.error(request, "Comment not found.")
+        return redirect('home')
     
+    # Redirect back to the recipe detail page or home feed
+    if redirect_url == 'recipe_detail' and recipe_id:
+        return redirect('recipe_detail', recipe_id=recipe_id)
     return redirect('home')
 
 

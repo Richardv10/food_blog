@@ -360,6 +360,48 @@ All 85 tests passed successfully, validating complete CRUD functionality across 
 
 ---
 
+<table>
+  <thead>
+    <tr>
+      <th>Page</th>
+      <th>Screenshot</th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
 # Ai Tools
 
 ## Code Creation
@@ -371,9 +413,52 @@ Co-pilot helped specifically thorough logical problem solving, and explaing how 
 ## Optimization 
 I've used co-pilot to refactor sections of code I thought could be improved, or asked for altrernative way to achieve objectives. Co-pilot was used extensively to ajust bootstrap classes and tweak things in bulk, or reorganize the CSS file as it grew. Early in development I tried out several different ways of implementing models, data retrival methods and schema, co-pilot allowed for rapid prototyping, and resulted in a more refined product through iterative development.
 
+## Co-pilot unit tests
+I used co-pilot to construct a test suite covering all CRUD operations across all models using a test database. These are detailed seperately. 
+
 
 # Cloud Deployment
 
 The project is deployed to Heroku and can be found above.
 
-## Set-up Heroku  
+## Set-up Heroku
+
+- After setting up an account
+
+- Create new app from the dropdown menu.
+- In settings -> Reveal Config Vars, and set environment variables.
+
+CLOUDINARY_URL: Obtained from Cloudinary
+DATABASE_URL: Obtained from Code Institute	
+DISABLE_COLLECTSTATIC: (this is temporary, and can be removed for the final deployment)
+SECRET_KEY:	Obtained from Django
+SPOONACULAR_URL: Obtained from Spoonacular
+
+Heroku needs two additional deployment files
+
+- requirements.txt (list of installed packages)
+- Procfile
+
+## Install this project's requirements
+
+pip3 install -r requirements.txt
+
+- If requirements file needs updated using:
+
+pip3 freeze --local > requirements.txt
+
+- Procfile can be created with the following:
+
+echo web: gunicorn FOOD_BLOG.wsgi > Procfile
+
+
+## Set-up Cloudinary
+
+- Set up free account with Cloudinary 
+- Copy the cloudinary URL to Heroku CONFIG VARS
+- Set cloudinary to use HTTPS through settings.py 
+
+## Set-up Spoonacular
+
+- Create a free account with Spoonacular
+- Copy the API key from the user area to Heroku config VARS
