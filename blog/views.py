@@ -213,4 +213,4 @@ def unshare_created_recipe(request, recipe_id):
     except CreatedRecipe.DoesNotExist:
         messages.error(request, 'Recipe not found.')
 
-    return redirect('my_recipes')
+    return redirect('home')
