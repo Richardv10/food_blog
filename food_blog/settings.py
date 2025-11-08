@@ -63,6 +63,8 @@ LOGOUT_REDIRECT_URL = '/'
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL'),
     'SECURE': True,  # Force HTTPS for all Cloudinary URLs
+    'SECURE_DISTRIBUTION': True,  # Use secure CDN distribution
+    'SECURE_URL': True,  # Generate secure HTTPS URLs in templates
 }
 
 MIDDLEWARE = [
