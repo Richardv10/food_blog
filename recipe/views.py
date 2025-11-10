@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -39,11 +38,17 @@ def get_or_fetch_recipe(recipe_id):
         pass
 
     # Fetch from API (if not cached)
-    url = (
-        f"https://api.spoonacular.com/recipes/{recipe_id}/information"
+    api_url = (
+        "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/"
+        f"recipes/{recipe_id}/information"
     )
-    params = {'apiKey': settings.SPOONACULAR_API_KEY}
-    response = requests.get(url, params=params)
+    headers = {
+        'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
+        'X-RapidAPI-Host': (
+            'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
+        )
+    }
+    response = requests.get(api_url, headers=headers)
     recipe_data = response.json()
 
     # Fix image URL
@@ -79,17 +84,27 @@ def home_view(request):
     # Get featured recipes (random recipes for carousel)
     featured_recipes = []
 
-    # Only fetch featured recipes if enabled in settings (for development)
+    # Only fetch featured recipes if enabled in settings
     if settings.ENABLE_FEATURED_RECIPES:
         try:
-            url = "https://api.spoonacular.com/recipes/random"
-            params = {
-                'apiKey': settings.SPOONACULAR_API_KEY,
-                'number': 5  # Get 5 random recipes for carousel
+            api_url = (
+                "https://spoonacular-recipe-food-nutrition-v1."
+                "p.rapidapi.com/recipes/random"
+            )
+            headers = {
+                'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
+                'X-RapidAPI-Host': (
+                    'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
+                )
             }
-            response = requests.get(url, params=params)
-            if response.status_code == 200:
-                data = response.json()
+            params = {
+                'number': 5  # Get 5 random recipes
+            }
+            response = requests.get(api_url, headers=headers, params=params)
+            data = response.json()
+           
+            # Check if we got a valid response with recipes
+            if response.status_code == 200 and 'recipes' in data:
                 for recipe_data in data.get('recipes', []):
                     # Fix image URL
                     recipe_data['image'] = (
@@ -97,6 +112,9 @@ def home_view(request):
                         f"{recipe_data['id']}-312x231.jpg"
                     )
                     featured_recipes.append(recipe_data)
+            else:
+                print(f"API Response Status: {response.status_code}")
+                print(f"API Response: {data}")
         except Exception as e:
             # If API fails, continue without featured recipes
             print(f"Error fetching featured recipes: {e}")
@@ -118,7 +136,7 @@ def home_view(request):
         is_shared=True
     ).select_related('user', 'recipe').order_by('-shared_at')
 
-# Get comments for each shared recipe (limit to 3 most recent)
+    # Get comments for each shared recipe (limit to 3 most recent)
 
     recipes_with_comments = []
     for shared_recipe in shared_recipes:
@@ -192,7 +210,7 @@ def share_recipe(request, recipe_id):
 
         return redirect('home')
 
-    # GET request - redirect to recipe detail (sharing via modal)
+    # GET request - redirect to recipe detail
     return redirect('recipe_detail', recipe_id=recipe_id)
 
 
@@ -210,14 +228,22 @@ def search_recipes(request):
 
         offset = (page - 1) * 10
 
-        url = "https://api.spoonacular.com/recipes/complexSearch"
+        api_url = (
+            "https://spoonacular-recipe-food-nutrition-v1."
+            "p.rapidapi.com/recipes/complexSearch"
+        )
+        headers = {
+            'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
+            'X-RapidAPI-Host': (
+                'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
+            )
+        }
         params = {
-            'apiKey': settings.SPOONACULAR_API_KEY,
             'query': query,
             'number': 10,
             'offset': offset
         }
-        response = requests.get(url, params=params)
+        response = requests.get(api_url, headers=headers, params=params)
         data = response.json()
         recipes = data.get('results', [])
         total_results = data.get('totalResults', 0)
@@ -268,12 +294,20 @@ def recipe_detail(request, recipe_id):
 # Get a random recipe from Spoonacular API and cache it
 def random_recipe(request):
 
-    url = "https://api.spoonacular.com/recipes/random"
+    api_url = (
+        "https://spoonacular-recipe-food-nutrition-v1."
+        "p.rapidapi.com/recipes/random"
+    )
+    headers = {
+        'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
+        'X-RapidAPI-Host': (
+            'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
+        )
+    }
     params = {
-        'apiKey': settings.SPOONACULAR_API_KEY,
         'number': 1  # Get one random recipe
     }
-    response = requests.get(url, params=params)
+    response = requests.get(api_url, headers=headers, params=params)
     data = response.json()
 
     recipe_data = data['recipes'][0]
@@ -354,7 +388,7 @@ def make_comment(request, recipe_id):
         rating = request.POST.get('rating', None)
         recipe_obj, _ = get_or_fetch_recipe(recipe_id)
 
-# Create the comment
+        # Create the comment
         RecipeComment.objects.create(
             recipe=recipe_obj,
             user=request.user,
@@ -487,7 +521,7 @@ def delete_comment(request, comment_id):
     return redirect('home')
 
 
-# Unshare saved recipe from feed (remove from public feed but keep)
+# Unshare saved recipe from feed
 @login_required
 def unshare_saved_recipe(request, recipe_id):
     try:

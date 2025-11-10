@@ -1,8 +1,7 @@
+
 # Recipe Room
 
 <img src="static/images/README/hero.png" alt="Three weeks of my life" width="600">
-
-
 
 
 ## Description 
@@ -18,13 +17,19 @@ A food blogging site where users can create, search and share recpies.
 5. Featured Recipes section that changes on every visit.
 6. Responsive mobile first design.
 
+
 # Agile Development
 
+
+
 ## User stories and Acceptance criteria 
+
+
 
 (Feature 1) 
 ### As a regular User I would like to be able to create recipes and store them on my user profile (Could have)
 -Use cloud storage, or key value pairs or via API ID to record favorites
+
 
 (Features 2 & 5)
 ### As a casual visitor, I want to browse a variety of recipes, so that I can discover new dishes easily. (Must have)
@@ -32,11 +37,13 @@ A food blogging site where users can create, search and share recpies.
 -Recipes are displayed in a grid or list format
 -If the API fails, exception handling and caching still provides usability
 
+
 (Feature 3)
 ### As a user, I want to like recipes, so that I can save my favourites and influence future recommendations.(Should have)
 -Each recipe has a visible "like" button.
 -Liked recipes are stored in the user’s profile.
 -Users can unlike recipes to remove them from favourites.
+
 
 (Feature 4)
 ### As a regular user I want to connect with others and share my love of food (Must have)
@@ -48,14 +55,21 @@ A food blogging site where users can create, search and share recpies.
 ### As a mobile user without access to a PC, I would like the site to be fully usable on mobiles and tablets (Must have)
 -Full site functionality preserved through use of media queries and bootstrap
 
+
 (Feature 2)
 ### As a vegetarian user, I want to filter out meat-based recipes, so that I only see dishes I can eat. (Could have)
 -Filter options include dietary tags (e.g., vegetarian, vegan, gluten-free).
 ~~Recipes with excluded ingredients are hidden from personalized feed~~
 -Settings persist across sessions.
 
-## Github projects board
+
+
+# Github projects board
+
+
 <img src="static/images/README/github.png" alt="Github user stories" width="600">
+
+
 GitHub projects was used for scoping and planning. Using MoSCoW labels for feature prioritization.
 As the sections took time to develop, I reviewed these weekly and ajusted when nessicary.   
 
@@ -65,27 +79,29 @@ As the sections took time to develop, I reviewed these weekly and ajusted when n
 
 
 
-## Core functionality
+# Core functionality
 
 The Recipe Room is a food blogging site linked to the spoonacular API for intergrated search/share functionality. Users can create an account, search for recipes or create their own. Both are stored in a users library. When viewed recipes are cached in the database for "local" retrieval. Users can comment on recipes, delete, and update their own comments. As these are stored locally the comments link to recipes in the database via a foreign key, and are visible to all users. 
 
-## Spoonacular API Intergration
+### Spoonacular API Intergration
 
 The concept of the site is to provide a resource to search curated recipes, share and comment. For this purpose I utilized an API that has over 50,000 recipes. The API allows for several different endpoints, allowing me to utlize the various functions through spoonaculars "recipe_id", "recipe_detail", and "random" URL's to furfil different functions of the site.
 
-## Cloudinary API Intergration
+### Cloudinary API Intergration
 
 Due to the use of eco dynos on Heroku, the need for persistant data storage requires the use of a cloud image host, I utilized cloudinary for this purpose. As recipes obtained from the API contain an image URL, this can be saved in the database when a recipe is viewed, then reused. Avoiding the need to store API recipe images locally. But for users recipes, they can upload an image which is stored as a cloudinary field in the database.
+
+
 
 # UX Design
 
 As the project scope is to deliver a shared community resource, I chose the format of social feed with infinite scroll. The landing zone of the site changes for returning users, replacing the Welcome banner with the users recipe library. This was to provide users with an easy to navigate exprerience. As the site may be used by users actively cooking, I wanted the functions to be as accessible as possible with as few clicks or touches as is neccissary. To this end I seperated the search function in another app, and paginated to create a distinction between the recipe creation and discovery area of the site, and the social feed and library that may be used for reference. Navigation is achieved via simple links on the navbar, and jump buttons nested in content. 
 
-# Color Scheme and design language
+### Color Scheme and design language
 
 After conducting research on various food blogs the design consensus seems to be light and airy with lots of pastels, I opted for a green theme, but included translucent elements to frame recipes for readability. I chose a simple image background that wouldn't interfiere with the displayed content and gives a clean look.
 
-## Primary Colors
+### Primary Colors
 
 | Color Name | Hex Code | RGB | Preview | Usage |
 |------------|----------|-----|---------|-------|
@@ -103,35 +119,37 @@ After conducting research on various food blogs the design consensus seems to be
 
 # Wireframes
 
-## Wireframe 1 - Home Page / Landing
+### Wireframe 1 - Home Page / Landing
 <img src="static/images/README/1.png" alt="Wireframe 1 - Home Page" width="600">
 
 *Initial homepage design showing the main landing zone and navigation structure*
 
-## Wireframe 2 - Logged In User
+### Wireframe 2 - Logged In User
 <img src="static/images/README/2.png" alt="Wireframe 2 - Logged in" width="600">
 
 *Logged in landing page*
 
-## Wireframe 3 - Recipe Search
+### Wireframe 3 - Recipe Search
 <img src="static/images/README/3.png" alt="Wireframe 3 - Recipe Search" width="600">
 
 *Recipe Search Function*
 
-## Wireframe 4 - Recipe detail
+### Wireframe 4 - Recipe detail
 <img src="static/images/README/4.png" alt="Wireframe 4 - User Dashboard" width="600">
 
 *User's recipe (unified display)*
 
-## Wireframe 5 - Recipe Creation Form
+### Wireframe 5 - Recipe Creation Form
 <img src="static/images/README/5.png" alt="Wireframe 5 - Create Recipe" width="600">
 
 *Form interface for users to create and submit their own recipes*
 
-## Wireframe 6 - Mobile Design
+### Wireframe 6 - Mobile Design
 <img src="static/images/README/6.png" alt="Wireframe 6 - Community Feed" width="400" height="700">
 
 *As the site is "feed based" mobile friendly design requires minimal rearrangement*
+
+-----------
 
 # Database ERD
 
@@ -176,6 +194,7 @@ After conducting research on various food blogs the design consensus seems to be
 
 
 
+
 # Technologies and Packages Used
 
 ## Backend
@@ -205,26 +224,28 @@ After conducting research on various food blogs the design consensus seems to be
 ## Landing Page
 
 <img src="static/images/README/welcome.png" alt="Welcome Section" width="600">
+
 *Landing page for Recipe Room* Rather than clutter the space with food pictures, Simple headings and a paragraph of text describes the sites features, with two buttons one to promp users to join, and the next leads to the search function that is available to all users of the site 
 
 <img src="static/images/README/landingzone.png" alt="Landing Zone" width="600">
 
 *Logged in user landing page* When a user is logged in, the generic welcome screen is replaced with a personalized greeting and a tabbed menu showing all the users saved recipes. These have buttons and indicators for sharing and updating those shared recipes 
 
+
 ## User Authentication
-<img src="static/images/README/notloggedin.png" alt="Not Logged In View" width="600">
+<img src="static/images/README/notloggedin.png" alt="Not Logged In View" width="400">
 
 *Default view for visitors who are not logged in*
 
-<img src="static/images/README/login.png" alt="Login Page" width="600">
+<img src="static/images/README/login.png" alt="Login Page" width="400">
 
 *Secure login interface for registered users*
 
-<img src="static/images/README/signup.png" alt="Sign Up Page" width="600">
+<img src="static/images/README/signup.png" alt="Sign Up Page" width="400">
 
 *Registration page for new users to create an account*
 
-<img src="static/images/README/loggedin.png" alt="Logged In View" width="600">
+<img src="static/images/README/loggedin.png" alt="Logged In View" width="400">
 
 *Authenticated user view with full access to features*
 
@@ -270,7 +291,7 @@ After conducting research on various food blogs the design consensus seems to be
 
 *Fully responsive mobile interface*
 
-<img src="static/images/README/tablet.png" alt="Tablet View" width="500">
+<img src="static/images/README/tablet.png" alt="Tablet View" width="400">
 
 *Optimized tablet display ensuring great UX across all devices*
 
@@ -488,6 +509,85 @@ All 85 tests passed successfully, validating complete CRUD functionality across 
   </tbody>
 </table>
 
+# Lighthouse testing
+
+<table>
+  <thead>
+    <tr>
+      <th>Page</th>
+      <th>Screenshot</th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Home Page</td>
+      <td><img src="static/images/README/lighthouse/homepage.png" alt="Home Page Lighthouse"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Login Page</td>
+      <td><img src="static/images/README/lighthouse/login.png" alt="Login Page Lighthouse"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Sign Up Page</td>
+      <td><img src="static/images/README/lighthouse/signup.png" alt="Sign Up Page Lighthouse"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Search Page</td>
+      <td><img src="static/images/README/lighthouse/search.png" alt="Search Page Lighthouse"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Recipe Detail Page</td>
+      <td><img src="static/images/README/lighthouse/recipedetail.png" alt="Recipe Detail Page Lighthouse"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Mobile View</td>
+      <td><img src="static/images/README/lighthouse/mobile.png" alt="Mobile View Lighthouse"></td>
+      <td>✅ Pass</td>
+    </tr>
+  </tbody>
+</table>
+
+# Browser compatibity
+
+<table>
+  <thead>
+    <tr>
+      <th>Browser</th>
+      <th>Screenshot</th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Chrome 131</td>
+      <td><img src="static/images/README/browser/chrome.png" alt="Chrome Browser Compatibility"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Edge 131</td>
+      <td><img src="static/images/README/browser/edge.png" alt="Edge Browser Compatibility"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Firefox 132</td>
+      <td><img src="static/images/README/browser/firefox.png" alt="Firefox Browser Compatibility"></td>
+      <td>✅ Pass</td>
+    </tr>
+    <tr>
+      <td>Safari 18.1</td>
+      <td><img src="static/images/README/browser/Safari.png" alt="Safari Browser Compatibility"></td>
+      <td>✅ Pass</td>
+    </tr>
+  </tbody>
+</table>
+
+
 # Ai Tools
 
 ## Code Creation
@@ -505,27 +605,30 @@ I used co-pilot to construct a test suite covering all CRUD operations across al
 
 # Cloud Deployment
 
-The project is deployed to Heroku and can be found above.
+The project is deployed to Heroku and can be found [here](https://recipe-room-b877ae9a2298.herokuapp.com/).
 
 ## Set-up Heroku
 
 - After setting up an account
 
 - Create new app from the dropdown menu.
+- In deployment -> Connect Github Repository to heroku
 - In settings -> Reveal Config Vars, and set environment variables.
 
-CLOUDINARY_URL: Obtained from Cloudinary
-DATABASE_URL: Obtained from Code Institute	
-DISABLE_COLLECTSTATIC: (this is temporary, and can be removed for the final deployment)
-SECRET_KEY:	Obtained from Django
-SPOONACULAR_URL: Obtained from Spoonacular
+- CLOUDINARY_URL: Obtained from Cloudinary
+- DATABASE_URL: Obtained from Code Institute	
+- DISABLE_COLLECTSTATIC: (this is temporary, and can be removed for the final deployment)
+- SECRET_KEY:	Obtained from Django
+- SPOONACULAR_URL: Obtained from Spoonacular
 
-Heroku needs two additional deployment files
+ Debug value must be set to "False" in settings.py for deployment to Heroku
+
+### Heroku needs two additional deployment files
 
 - requirements.txt (list of installed packages)
 - Procfile
 
-## Install this project's requirements
+### Install this project's requirements
 
 pip3 install -r requirements.txt
 
@@ -538,13 +641,13 @@ pip3 freeze --local > requirements.txt
 echo web: gunicorn FOOD_BLOG.wsgi > Procfile
 
 
-## Set-up Cloudinary
+### Set-up Cloudinary
 
 - Set up free account with Cloudinary 
 - Copy the cloudinary URL to Heroku CONFIG VARS
 - Set cloudinary to use HTTPS through settings.py 
 
-## Set-up Spoonacular
+### Set-up Spoonacular
 
 - Create a free account with Spoonacular
-- Copy the API key from the user area to Heroku config VARS
+- Copy the API key from the user area to Heroku CONFIG VARS (For this project I have used Rapid API's student offer)
