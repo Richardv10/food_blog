@@ -101,28 +101,20 @@ def home_view(request):
                 'number': 5  # Get 5 random recipes
             }
             response = requests.get(api_url, headers=headers, params=params)
-            
             if response.status_code == 200:
                 data = response.json()
-                # Check if we got a valid response with recipes
-                if 'recipes' in data:
-                    for recipe_data in data.get('recipes', []):
-                        # Fix image URL
-                        recipe_data['image'] = (
-                            f"https://spoonacular.com/recipeImages/"
-                            f"{recipe_data['id']}-312x231.jpg"
-                        )
-                        featured_recipes.append(recipe_data)
-                else:
-                    print(f"No 'recipes' in response: {data}")
-            else:
-                print(
-                    f"Featured recipes API error: "
-                    f"Status {response.status_code}"
-                )
+                for recipe_data in data.get('recipes', []):
+                    # Fix image URL
+                    recipe_data['image'] = (
+                        f"https://spoonacular.com/recipeImages/"
+                        f"{recipe_data['id']}-312x231.jpg"
+                    )
+                    featured_recipes.append(recipe_data)
         except Exception as e:
             # If API fails, continue without featured recipes
-            print(f"Error fetching featured recipes: {e}")    # Get user's recipes if authenticated
+            print(f"Error fetching featured recipes: {e}")
+
+    # Get user's recipes if authenticated
     saved_recipes = None
     created_recipes = None
     if request.user.is_authenticated:

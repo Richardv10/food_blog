@@ -101,6 +101,8 @@ on mobiles and tablets (Must have)
 
 <img src="static/images/README/github.png" alt="Github user stories" width="600">
 
+Link to projects board: [https://github.com/users/Richardv10/projects/7](https://github.com/users/Richardv10/projects/7)
+
 
 The GitHub Projects board was used for scoping and planning using MoSCoW labels for
 feature prioritization. As sections evolved, I reviewed them weekly and adjusted when
@@ -663,6 +665,9 @@ All 85 tests passed successfully, validating complete CRUD functionality across 
   </tbody>
 </table>
 
+## Manual Testing
+
+In addition to CRUD functionality, Defensive testing was conducted by clicking links and navigating the site. I also asked friends and other students to create users to organically populate the feed
 
 # Ai Tools
 
@@ -676,7 +681,7 @@ would otherwise have taken much longer.
 ## Debugging
 Co-pilot helped specifically through logical problem solving and by explaining how to
 achieve given objectives. I frequently asked Co-pilot to identify errors regarding
-Django-specific functions and behaviours I wasn't familiar with. File structure
+Django-specific functions and behaviors I wasn't familiar with. File structure
 issues and Cloudinary-specific parameters were common questions, and Co-pilot has
 been invaluable while learning a large framework.
 
