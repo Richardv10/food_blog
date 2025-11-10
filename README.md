@@ -3,17 +3,44 @@
 
 <img src="static/images/README/hero.png" alt="Three weeks of my life" width="600">
 
+## Table of Contents
+
+- [Description](#description)
+- [Features](#features)
+- [Agile Development](#agile-development)
+- [Github Projects Board](#github-projects-board)
+- [Core Functionality](#core-functionality)
+- [UX Design](#ux-design)
+- [Wireframes](#wireframes)
+- [Database ERD](#database-erd)
+- [Technologies and Packages Used](#technologies-and-packages-used)
+- [Screenshots](#screenshots)
+- [Testing, Performance and Validation](#testing-performance-and-validation)
+- [HTML Validation Testing](#html-validation-testing)
+- [Python Validation](#python-validation)
+- [Lighthouse Testing](#lighthouse-testing)
+- [Browser Compatibility](#browser-compatibility)
+- [AI Tools](#ai-tools)
+- [Cloud Deployment](#cloud-deployment)
+- [Limitations and Further Development](#limitations-and-further-development)
+- [Credits](#credits)
+
+## Deployed site [here] (https://recipe-room-b877ae9a2298.herokuapp.com/)
+
 
 ## Description 
 
-A food blogging site where users can create, search and share recpies. 
+A food blogging site where users can create, search, and share recipes.
 
 ## Features
 
 1. Secure user accounts with individual CRUD functionality.
-2. Spoonacular API intergration for searching recipes, including a random search tool, and options to refine/exclude.
-3. Logged in users have a persistant saved "my recipes" section, (with recipe caching to reduce API calls).
-4. Users can create and share recipes, (users images are stored seperately with Cloudinary).
+2. Spoonacular API integration for searching recipes, including a random search tool, and
+  options to refine or exclude results.
+3. Logged-in users have a persistent saved "My Recipes" section (with recipe caching to
+  reduce API calls).
+4. Users can create and share recipes (users' images are stored separately with
+  Cloudinary).
 5. Featured Recipes section that changes on every visit.
 6. Responsive mobile first design.
 
@@ -26,37 +53,42 @@ A food blogging site where users can create, search and share recpies.
 
 
 
-(Feature 1) 
-### As a regular User I would like to be able to create recipes and store them on my user profile (Could have)
--Use cloud storage, or key value pairs or via API ID to record favorites
+## (Feature 1) 
+### As a regular user I would like to be able to create recipes and store them on my
+user profile (Could have)
+- Use cloud storage, key/value pairs, or an API ID to record favorites
 
 
-(Features 2 & 5)
-### As a casual visitor, I want to browse a variety of recipes, so that I can discover new dishes easily. (Must have)
--API returns a list of recipes with title, image, description, tags, and is searchable
--Recipes are displayed in a grid or list format
--If the API fails, exception handling and caching still provides usability
+## (Features 2 & 5)
+### As a casual visitor, I want to browse a variety of recipes so that I can discover
+new dishes easily. (Must have)
+- API returns a list of recipes with title, image, description, and tags, and is
+  searchable
+- Recipes are displayed in a grid or list format
+- If the API fails, exception handling and caching still provide usable
+  functionality
 
 
-(Feature 3)
-### As a user, I want to like recipes, so that I can save my favourites and influence future recommendations.(Should have)
+## (Feature 3)
+### As a user, I want to like recipes, so that I can save my favorites and influence future recommendations.(Should have)
 -Each recipe has a visible "like" button.
 -Liked recipes are stored in the user’s profile.
--Users can unlike recipes to remove them from favourites.
+-Users can unlike recipes to remove them from favorites.
 
 
-(Feature 4)
+## (Feature 4)
 ### As a regular user I want to connect with others and share my love of food (Must have)
 -Social feed where users can comment and share recipes
 -User can modify, delete or post their own comments
 -Users can't delete each others comments
 
-(Feature 6)
-### As a mobile user without access to a PC, I would like the site to be fully usable on mobiles and tablets (Must have)
--Full site functionality preserved through use of media queries and bootstrap
+## (Feature 6)
+### As a mobile user without access to a PC, I would like the site to be fully usable
+on mobiles and tablets (Must have)
+- Full site functionality preserved through use of media queries and Bootstrap
 
 
-(Feature 2)
+## (Feature 2)
 ### As a vegetarian user, I want to filter out meat-based recipes, so that I only see dishes I can eat. (Could have)
 -Filter options include dietary tags (e.g., vegetarian, vegan, gluten-free).
 ~~Recipes with excluded ingredients are hidden from personalized feed~~
@@ -70,8 +102,9 @@ A food blogging site where users can create, search and share recpies.
 <img src="static/images/README/github.png" alt="Github user stories" width="600">
 
 
-GitHub projects was used for scoping and planning. Using MoSCoW labels for feature prioritization.
-As the sections took time to develop, I reviewed these weekly and ajusted when nessicary.   
+The GitHub Projects board was used for scoping and planning using MoSCoW labels for
+feature prioritization. As sections evolved, I reviewed them weekly and adjusted when
+necessary.
 
 
 
@@ -81,25 +114,56 @@ As the sections took time to develop, I reviewed these weekly and ajusted when n
 
 # Core functionality
 
-The Recipe Room is a food blogging site linked to the spoonacular API for intergrated search/share functionality. Users can create an account, search for recipes or create their own. Both are stored in a users library. When viewed recipes are cached in the database for "local" retrieval. Users can comment on recipes, delete, and update their own comments. As these are stored locally the comments link to recipes in the database via a foreign key, and are visible to all users. 
+The Recipe Room is a food blogging site linked to the Spoonacular API for integrated
+search/share functionality. Users can create an account, search for recipes, or create
+their own. Both are stored in a user's library. When recipes are viewed, they are
+cached in the database for local retrieval. Users can comment on recipes, delete,
+and update their own comments. Because comments are stored locally they link to
+recipes in the database via a foreign key and are visible to all users.
 
-### Spoonacular API Intergration
+### Spoonacular API Integration
 
-The concept of the site is to provide a resource to search curated recipes, share and comment. For this purpose I utilized an API that has over 50,000 recipes. The API allows for several different endpoints, allowing me to utlize the various functions through spoonaculars "recipe_id", "recipe_detail", and "random" URL's to furfil different functions of the site.
+The concept of the site is to provide a resource to search curated recipes, share,
+and comment. For this purpose I utilized an API that has over 50,000 recipes. The
+API exposes several endpoints, which I use through Spoonaculars "recipe_id",
+"recipe_detail", and "random" URLs to fulfill different functions of the site. Near
+submission I took advantage of a student offer through RapidAPI to provide higher
+usage limits to mirror real-world functionality for a recipe blog.
 
-### Cloudinary API Intergration
 
-Due to the use of eco dynos on Heroku, the need for persistant data storage requires the use of a cloud image host, I utilized cloudinary for this purpose. As recipes obtained from the API contain an image URL, this can be saved in the database when a recipe is viewed, then reused. Avoiding the need to store API recipe images locally. But for users recipes, they can upload an image which is stored as a cloudinary field in the database.
+### Cloudinary API Integration
+
+Due to the use of eco dynos on Heroku, persistent data storage requires the use
+of a cloud image host; I utilized Cloudinary for this purpose. As API recipes include
+an image URL, this can be saved in the database when a recipe is viewed and then
+reused, avoiding the need to store API recipe images locally. For user-created
+recipes, users can upload images which are stored via Cloudinary fields in the
+database.
 
 
 
 # UX Design
 
-As the project scope is to deliver a shared community resource, I chose the format of social feed with infinite scroll. The landing zone of the site changes for returning users, replacing the Welcome banner with the users recipe library. This was to provide users with an easy to navigate exprerience. As the site may be used by users actively cooking, I wanted the functions to be as accessible as possible with as few clicks or touches as is neccissary. To this end I seperated the search function in another app, and paginated to create a distinction between the recipe creation and discovery area of the site, and the social feed and library that may be used for reference. Navigation is achieved via simple links on the navbar, and jump buttons nested in content. 
+As the project scope is to deliver a shared community resource, I chose a social
+feed format with infinite scroll. The landing zone of the site changes for
+returning users, replacing the welcome banner with the user's recipe library. This
+was intended to provide users with an easy-to-navigate experience. Because the site
+may be used by people actively cooking, the functions are designed to be as
+accessible as possible with as few clicks or touches as necessary. To this end I
+separated the search function into another app and paginated results to create a
+distinction between recipe creation/discovery and the social feed/library used for
+reference. Navigation is achieved via simple links on the navbar and jump buttons
+nested in content.
+
 
 ### Color Scheme and design language
 
-After conducting research on various food blogs the design consensus seems to be light and airy with lots of pastels, I opted for a green theme, but included translucent elements to frame recipes for readability. I chose a simple image background that wouldn't interfiere with the displayed content and gives a clean look.
+After conducting research on various food blogs, the design consensus seemed to be
+light and airy with lots of pastels. I opted for a green theme and included
+translucent elements to frame recipes for readability. I chose a simple image
+background that would not interfere with the displayed content and that gives a
+clean look.
+
 
 ### Primary Colors
 
@@ -155,6 +219,11 @@ After conducting research on various food blogs the design consensus seems to be
 
 <img src="static/images/README/ERD.png" alt="ERD" width="1000">
 
+## Extension during development
+
+The CreatedRecipe model was added after achieving MVP, (to extend the functionality of the project). It solely interacts with the User model, and didn't alter any existing Model recipe relationships. I chose not to add rating functionality to the created recipes, as this would have significantly increased the complexity of the schema. 
+
+
 ## Relationships
 
 ### User (Django Auth)
@@ -209,6 +278,7 @@ After conducting research on various food blogs the design consensus seems to be
 ## Cloud Services & APIs
 - **Cloudinary 1.36.0** - Image storage and management
 - **Spoonacular API** - Recipe data integration
+- **Heroku** - Cloud Hosting provider
 
 ## Static Files & Deployment
 - **WhiteNoise 6.11.0** - Static file serving
@@ -225,11 +295,17 @@ After conducting research on various food blogs the design consensus seems to be
 
 <img src="static/images/README/welcome.png" alt="Welcome Section" width="600">
 
-*Landing page for Recipe Room* Rather than clutter the space with food pictures, Simple headings and a paragraph of text describes the sites features, with two buttons one to promp users to join, and the next leads to the search function that is available to all users of the site 
+*Landing page for Recipe Room.* Rather than clutter the space with food pictures,
+simple headings and a short paragraph describe the site's features. Two buttons
+prompt users to join and to go to the search function, which is available to all
+users.
 
 <img src="static/images/README/landingzone.png" alt="Landing Zone" width="600">
 
-*Logged in user landing page* When a user is logged in, the generic welcome screen is replaced with a personalized greeting and a tabbed menu showing all the users saved recipes. These have buttons and indicators for sharing and updating those shared recipes 
+*Logged-in user landing page.* When a user is logged in, the generic welcome
+screen is replaced with a personalized greeting and a tabbed menu showing all of
+the user's saved recipes. These have buttons and indicators for sharing and
+updating shared recipes.
 
 
 ## User Authentication
@@ -375,7 +451,7 @@ Comprehensive CRUD (Create, Read, Update, Delete) testing across all four models
 
 ---
 
-## Conclusion
+## Test Conclusion
 
 All 85 tests passed successfully, validating complete CRUD functionality across all models with proper authentication, permissions, and error handling.
 
@@ -553,7 +629,7 @@ All 85 tests passed successfully, validating complete CRUD functionality across 
   </tbody>
 </table>
 
-# Browser compatibity
+# Browser compatibility
 
 <table>
   <thead>
@@ -591,16 +667,30 @@ All 85 tests passed successfully, validating complete CRUD functionality across 
 # Ai Tools
 
 ## Code Creation
-I utilized claude Sonnet 4.5 to assist in code production through vs code co-pilot. Early in development of the project, frequent API calls made me aware the need for a caching system. I used co-pilot to help me implement a caching system into my exisiting schema, and assising in the creation of large sections of django template code on the sites frontend, which would otherwise have taken much longer.     
+I utilized Claude Sonnet 4.5 to assist in code production through VS Code Co-pilot. Early
+in development, frequent API calls made me aware of the need for a caching system.
+I used Co-pilot to help implement caching in my existing schema and to assist in the
+creation of large sections of Django template code on the site's frontend, which
+would otherwise have taken much longer.
 
 ## Debugging
-Co-pilot helped specifically thorough logical problem solving, and explaing how to achieve given objectives. I frequently asked co-pilot to identify errors regarding django specific functions, and behaviour I wasn't familiar with. File structure errors, Cloudinary specific paramenters, with such a large framework to learn co-pilot has been invaluable in this respect. 
+Co-pilot helped specifically through logical problem solving and by explaining how to
+achieve given objectives. I frequently asked Co-pilot to identify errors regarding
+Django-specific functions and behaviours I wasn't familiar with. File structure
+issues and Cloudinary-specific parameters were common questions, and Co-pilot has
+been invaluable while learning a large framework.
 
 ## Optimization 
-I've used co-pilot to refactor sections of code I thought could be improved, or asked for altrernative way to achieve objectives. Co-pilot was used extensively to ajust bootstrap classes and tweak things in bulk, or reorganize the CSS file as it grew. Early in development I tried out several different ways of implementing models, data retrival methods and schema, co-pilot allowed for rapid prototyping, and resulted in a more refined product through iterative development.
+I've used Co-pilot to refactor sections of code I thought could be improved or to ask
+for alternative ways to achieve objectives. Co-pilot was used extensively to adjust
+Bootstrap classes and tweak things in bulk or to reorganize the CSS file as it grew.
+Early in development I tried several different approaches to implementing models,
+data retrieval methods, and schema. Co-pilot allowed rapid prototyping and resulted
+in a more refined product through iterative development.
 
 ## Co-pilot unit tests
-I used co-pilot to construct a test suite covering all CRUD operations across all models using a test database. These are detailed seperately. 
+I used Co-pilot to construct a test suite covering all CRUD operations across all
+models using a test database. These are detailed separately.
 
 
 # Cloud Deployment
@@ -619,7 +709,7 @@ The project is deployed to Heroku and can be found [here](https://recipe-room-b8
 - DATABASE_URL: Obtained from Code Institute	
 - DISABLE_COLLECTSTATIC: (this is temporary, and can be removed for the final deployment)
 - SECRET_KEY:	Obtained from Django
-- SPOONACULAR_URL: Obtained from Spoonacular
+- SPOONACULAR_URL: Obtained from Spoonacular (I have switched to "RapidAPI_URL" for deployment to use their student offer)
 
  Debug value must be set to "False" in settings.py for deployment to Heroku
 
@@ -651,3 +741,37 @@ echo web: gunicorn FOOD_BLOG.wsgi > Procfile
 
 - Create a free account with Spoonacular
 - Copy the API key from the user area to Heroku CONFIG VARS (For this project I have used Rapid API's student offer)
+
+### Initialization
+
+- Under the deploy tab, find "deploy from main branch"
+
+### Verification of deployment
+
+- To compare functionality, run a development server from "localhost" in the VS code terminal. The result should be the same. If not enable Debug in settings.py for the local deployment.
+
+
+
+
+
+# Limitations and Further Development
+
+- Search function requires user to modify search parameters using language like "exclude" and "include". I would add a complex search section using filters. This relates to the "As a vegetarian" user story (that has a strike-through), I wanted to add the related functionality via a filter, but this was a "could have", and did not have time.
+
+- Rating system does not aggregate, no system to search recipes "rated by others". This would require significant changes to the models, and was beyond project scope.
+
+- The user section is just a recipe library, further development I would flesh this out to be a full user profile, that tracks recent comments, interactions, and posts. 
+
+- When a user views a recipe, this is cached in the database. This data would be useful for metrics. As given enough usage, users preferences and likes could be recorded, this would allow the "featured recipes" section to be user specific. 
+
+
+
+# Credits 
+
+- Background image: "http://www.unsplash.com"
+- Django for everybody course - Free code camp: https://www.youtube.com/watch?v=o0XbHvKxw7Y&t=32320s
+- CodeAcademy (various resources)
+- Thanks to Crystal at Spoonacular for providing me student access.
+- Thanks to Mark, Lewis and Tom and everyone at Code Institute for their help and support.
+
+
