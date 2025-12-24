@@ -108,7 +108,7 @@ TEMPLATES = [
     },
 ]
 
-RAPIDAPI_KEY = os.environ.get("RAPIDAPI_KEY")
+SPOON_API_KEY = os.environ.get("SPOON_API_KEY")
 
 WSGI_APPLICATION = 'food_blog.wsgi.application'
 
