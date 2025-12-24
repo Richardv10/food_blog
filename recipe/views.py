@@ -39,14 +39,10 @@ def get_or_fetch_recipe(recipe_id):
 
     # Fetch from API (if not cached)
     api_url = (
-        "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/"
-        f"recipes/{recipe_id}/information"
+        f"https://api.spoonacular.com/recipes/{recipe_id}/information"
     )
     headers = {
-        'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
-        'X-RapidAPI-Host': (
-            'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
-        )
+        'x-api-key': settings.SPOON_API_KEY,
     }
     response = requests.get(api_url, headers=headers)
     recipe_data = response.json()
@@ -87,15 +83,9 @@ def home_view(request):
     # Only fetch featured recipes if enabled in settings
     if settings.ENABLE_FEATURED_RECIPES:
         try:
-            api_url = (
-                "https://spoonacular-recipe-food-nutrition-v1."
-                "p.rapidapi.com/recipes/random"
-            )
+            api_url = "https://api.spoonacular.com/recipes/random"
             headers = {
-                'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
-                'X-RapidAPI-Host': (
-                    'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
-                )
+                'x-api-key': settings.SPOON_API_KEY,
             }
             params = {
                 'number': 5  # Get 5 random recipes
@@ -223,15 +213,9 @@ def search_recipes(request):
 
         offset = (page - 1) * 10
 
-        api_url = (
-            "https://spoonacular-recipe-food-nutrition-v1."
-            "p.rapidapi.com/recipes/complexSearch"
-        )
+        api_url = "https://api.spoonacular.com/recipes/complexSearch"
         headers = {
-            'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
-            'X-RapidAPI-Host': (
-                'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
-            )
+            'x-api-key': settings.SPOON_API_KEY,
         }
         params = {
             'query': query,
@@ -289,27 +273,26 @@ def recipe_detail(request, recipe_id):
 # Get a random recipe from Spoonacular API and cache it
 def random_recipe(request):
 
-    api_url = (
-        "https://spoonacular-recipe-food-nutrition-v1."
-        "p.rapidapi.com/recipes/random"
-    )
+    api_url = "https://api.spoonacular.com/recipes/random"
     headers = {
-        'X-RapidAPI-Key': settings.RAPIDAPI_KEY,
-        'X-RapidAPI-Host': (
-            'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
-        )
+        'x-api-key': settings.SPOON_API_KEY,
     }
     params = {
         'number': 1  # Get one random recipe
     }
     response = requests.get(api_url, headers=headers, params=params)
-    data = response.json()
+    if response.status_code == 200:
+        data = response.json()
+        if 'recipes' in data and len(data['recipes']) > 0:
+            recipe_data = data['recipes'][0]
+        else:
+            # Handle unexpected response format
+            recipe_data = data if isinstance(data, dict) else {}
+    else:
+        return render(request, 'search/detail.html', {'error': 'Failed to fetch recipe'})
 
-    recipe_data = data['recipes'][0]
-    recipe_id = recipe_data['id']
-
-    # Cache this recipe for future use
-    recipe_obj, recipe = get_or_fetch_recipe(recipe_id)
+    # Use helper to fetch full recipe details and cache
+    recipe_obj, recipe = get_or_fetch_recipe(recipe_data.get('id', 0))
 
     return render(request, 'search/detail.html', {'recipe': recipe})
 
